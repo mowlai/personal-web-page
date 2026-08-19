@@ -60,6 +60,18 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     />
 
+    <script is:inline>
+      /* Runs before first paint: marks the document so [data-stream] blocks are
+         hidden until the streaming script below has tokenized them. Skipped when
+         the visitor prefers reduced motion, leaving the text plainly visible. */
+      try {
+        var mm = window.matchMedia;
+        if (!(mm && mm('(prefers-reduced-motion: reduce)').matches)) {
+          document.documentElement.classList.add('js-stream');
+        }
+      } catch (e) { /* leave the text plainly visible */ }
+    </script>
+
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
       '@context': 'https://schema.org',
       '@type': 'Person',
@@ -77,6 +89,73 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
     <Header />
     <main id="main"><slot /></main>
     {footer && <Footer />}
+
+    <script is:inline>
+      /* Streams [data-stream] blocks in as if a terminal were printing them.
+         Splits on whitespace so word wrapping is unaffected (splitting per
+         character can introduce break opportunities mid-word), assigns each
+         token an index, and lets CSS stagger the reveal. Text stays in the
+         DOM the whole time, so crawlers and screen readers see it in full. */
+      (() => {
+        const root = document.documentElement;
+        // Any failure below must not leave [data-stream] blocks hidden by the
+        // head guard, so the whole thing unwinds to plainly visible text.
+        const bail = () => root.classList.remove('js-stream');
+
+        try {
+        const blocks = document.querySelectorAll('[data-stream]');
+        if (!blocks.length) return bail();
+
+        let reduced = false;
+        try {
+          reduced = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+        } catch (e) { /* treat as no preference */ }
+
+        let i = 0;
+        blocks.forEach((block) => {
+          block.classList.add('ready');
+          // Walk text nodes only, so inline markup inside the block survives.
+          // Skip raw-text containers: with scripting on, <noscript> holds its
+          // markup as a text node, and tokenizing that would surface tags as text.
+          const skip = { SCRIPT: 1, STYLE: 1, NOSCRIPT: 1, TEXTAREA: 1 };
+          const walker = document.createTreeWalker(block, NodeFilter.SHOW_TEXT, {
+            acceptNode: (n) =>
+              n.parentNode && skip[n.parentNode.nodeName]
+                ? NodeFilter.FILTER_REJECT
+                : NodeFilter.FILTER_ACCEPT,
+          });
+          const nodes = [];
+          for (let n = walker.nextNode(); n; n = walker.nextNode()) nodes.push(n);
+
+          nodes.forEach((node) => {
+            const parts = node.nodeValue.split(/(\s+)/);
+            if (parts.length === 1 && !parts[0].trim()) return;
+            const frag = document.createDocumentFragment();
+            parts.forEach((part) => {
+              if (!part) return;
+              if (!part.trim()) { frag.appendChild(document.createTextNode(part)); return; }
+              const span = document.createElement('span');
+              span.className = 'tok';
+              span.style.setProperty('--i', String(i++));
+              span.textContent = part;
+              frag.appendChild(span);
+            });
+            node.parentNode.replaceChild(frag, node);
+          });
+        });
+
+        if (reduced) { root.classList.add('no-stream'); return; }
+
+        root.classList.add('streaming');
+        // Mark done so trailing carets disappear once the last token lands.
+        const step = 9, tail = 400;
+        setTimeout(() => {
+          root.classList.remove('streaming');
+          root.classList.add('streamed');
+        }, i * step + tail);
+        } catch (e) { bail(); }
+      })();
+    </script>
 
     <script is:inline>
       /* Resolves .js-email links from their encoded token, on user intent only.

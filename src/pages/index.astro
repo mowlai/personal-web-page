@@ -13,7 +13,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 <Base footer={false}>
   <div class="wrap home">
     <!-- Identity -->
-    <section class="intro">
+    <section class="intro" data-stream>
       <img
         class="intro__photo"
         src="/images/ryan-mowlai.jpg"
@@ -25,20 +25,32 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
       />
 
       <div>
-        <h1 class="intro__name">{site.name}<span class="caret" aria-hidden="true"></span></h1>
+        <h1 class="intro__name">{site.name}<span class="stream-caret" aria-hidden="true"></span></h1>
         <p class="intro__role">{site.role}</p>
         <p class="intro__affil">{site.affiliation}</p>
       </div>
     </section>
 
     <!-- Summary -->
-    <section class="summary">
+    <section class="summary" data-stream>
       <p>
-        I build machine learning systems that run physical infrastructure. My doctoral
-        work, with the U.S. Army Corps of Engineers, develops reinforcement learning
-        policies, time-series foundation models, and agentic controllers for autonomous
-        water treatment. Previously: RL building-energy control in Milan, multimodal
-        sensing at Lightsense, and LLM-driven audience modeling at IBM.
+        I am a PhD candidate in Systems and Industrial Engineering at the University of
+        Arizona, expected to graduate in May 2027. My dissertation develops reinforcement
+        learning and agentic AI methods for autonomous operation of ultrafiltration water
+        treatment systems, work funded by the U.S. Army Corps of Engineers. The models run
+        on real plant data and real hardware, which shapes how I think about evaluation:
+        a policy is only interesting if it holds up on the machine, not just on a benchmark.
+      </p>
+      <p>
+        My path into this started with prediction. At Sapienza I worked on transformer-based
+        human pose forecasting for human robot collaboration. The PhD moved me from
+        predicting what a system will do to deciding what it should do next.
+      </p>
+      <p>
+        Alongside the PhD I have worked at IBM on large-scale propensity modeling and LLM
+        applications, at Lightsense Technology on multimodal deep learning and adversarial
+        evaluation, and at DIDO Srl in Milan on PPO-based building energy optimization
+        deployed on AWS. I have published at IEEE SIEDS, with additional work in progress.
       </p>
 
       <nav class="links" aria-label="Profiles">
@@ -92,17 +104,17 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     margin-bottom: var(--s-7);
   }
   .intro__photo {
-    width: 124px;
-    height: 124px;
+    width: 128px;
+    height: 128px;
     flex: none;
     object-fit: cover;
     object-position: center 18%;
-    /* Square, not round — closer to a terminal window than a social avatar. */
-    border: 1px solid var(--rule-strong);
-    filter: grayscale(1) contrast(1.02);
-    transition: filter .25s var(--ease);
+    border-radius: 50%;
+    /* Hairline ring plus a soft outer halo. */
+    box-shadow:
+      0 0 0 1px var(--rule-strong),
+      0 0 0 8px var(--gray-10);
   }
-  .intro__photo:hover { filter: grayscale(0); }
 
   .intro__name {
     font-size: clamp(1.6rem, 1.2rem + 1.9vw, 2.25rem);
@@ -130,7 +142,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 
   @media (max-width: 560px) {
     .intro { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
-    .intro__photo { width: 100px; height: 100px; }
+    .intro__photo { width: 104px; height: 104px; }
   }
 
   /* ---------- Summary ---------- */
@@ -138,12 +150,14 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     font-size: .9375rem;
     line-height: 1.85;
     color: var(--gray-90);
-    margin: 0 0 var(--s-5);
+    margin: 0 0 var(--s-4);
     max-width: var(--measure);
     /* Hanging rule down the left, like a quoted block in a terminal. */
     padding-left: var(--s-4);
     border-left: 2px solid var(--rule);
   }
+
+  .summary p:last-of-type { margin-bottom: var(--s-5); }
 
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
 

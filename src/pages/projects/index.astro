@@ -2,6 +2,7 @@
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import ProjectCard from '../../components/ProjectCard.astro';
+import PageHeader from '../../components/PageHeader.astro';
 
 const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
   (a, b) => +b.data.date - +a.data.date
@@ -12,14 +13,12 @@ const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
   title="Projects"
   description="Applied machine learning systems built by Ryan Mowlai: autonomous water treatment, RL control, multimodal sensing, and LLM tooling."
 >
-  <section class="section wrap">
-    <p class="eyebrow">Projects</p>
-    <h1>Projects</h1>
-    <p class="lede">
-      Systems I have built end to end, not just written about: control frameworks,
-      forecasting pipelines, and the tooling around them. Each entry links to code
-      or data where the work is public.
-    </p>
+  <div class="wrap page">
+    <PageHeader label="projects" title="Projects" meta={`${projects.length} entries`}>
+      Systems built end to end, not just written about: control frameworks, forecasting
+      pipelines, and the tooling around them. Each entry links to code or data where
+      the work is public.
+    </PageHeader>
 
     {projects.length === 0 ? (
       <p class="empty">No projects published yet.</p>
@@ -38,17 +37,10 @@ const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
         ))}
       </div>
     )}
-  </section>
+  </div>
 </Base>
 
 <style>
-  h1 { margin-bottom: var(--s-3); }
-  .lede {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    max-width: var(--measure);
-    margin-bottom: var(--s-7);
-  }
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));

@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import PublicationEntry from '../components/PublicationEntry.astro';
+import PageHeader from '../components/PageHeader.astro';
 import { publications } from '../data/publications';
 
 // Reverse-chronological, grouped by year. `year` may be a string for
@@ -19,13 +20,11 @@ const count = publications.length;
   title="Publications"
   description="Peer-reviewed papers, preprints, and manuscripts in preparation by Ryan Mowlai."
 >
-  <section class="section wrap">
-    <p class="eyebrow">Publications</p>
-    <h1>Publications</h1>
-    <p class="lede">
-      {count} entries, newest first. Every item carries a direct link to the PDF or
-      preprint where one is available, and a one-click BibTeX citation.
-    </p>
+  <div class="wrap page">
+    <PageHeader label="publications" title="Publications" meta={`${count} entries`}>
+      Reverse-chronological. Every item carries a direct link to the PDF or preprint
+      where one is available, and a one-click BibTeX citation.
+    </PageHeader>
 
     {years.map((y) => (
       <div class="year-block">
@@ -33,17 +32,10 @@ const count = publications.length;
         {byYear.get(y)!.map((pub) => <PublicationEntry pub={pub} />)}
       </div>
     ))}
-  </section>
+  </div>
 </Base>
 
 <style>
-  h1 { margin-bottom: var(--s-3); }
-  .lede {
-    font-size: 1rem;
-    color: var(--text-secondary);
-    max-width: var(--measure);
-    margin-bottom: var(--s-7);
-  }
   .year-block + .year-block { margin-top: var(--s-7); }
   .year-heading {
     font-family: var(--font-mono);

@@ -17,10 +17,12 @@ const fmt = (dt: Date) =>
 
 <Base title={d.title} description={d.summary} image={d.cover} type="article">
   <article class="wrap page">
-    <a class="back" href="/news">&larr; News</a>
-    <time class="meta" datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
-    <h1>{d.title}</h1>
-    <p class="summary">{d.summary}</p>
+    <header class="page-head" data-stream>
+      <a class="back" href="/news">&larr; news</a>
+      <time class="meta" datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
+      <h1>{d.title}</h1>
+      <p class="lede">{d.summary}</p>
+    </header>
 
     {d.cover && (
       <figure class="cover">
@@ -36,7 +38,6 @@ const fmt = (dt: Date) =>
 </Base>
 
 <style>
-  .page { padding-block: var(--s-7) var(--s-6); max-width: 820px; }
   .back {
     display: inline-block;
     font-size: .8125rem;
@@ -45,8 +46,7 @@ const fmt = (dt: Date) =>
     border: 0;
   }
   .back:hover { color: var(--accent); border: 0; }
-  h1 { margin: var(--s-2) 0 var(--s-3); }
-  .summary { font-size: 1.0625rem; color: var(--text-secondary); max-width: var(--measure); }
-  .cover { margin: var(--s-5) 0 var(--s-6); }
+  .page-head h1 { margin-top: var(--s-2); }
+  .cover { margin: 0 0 var(--s-6); }
   .cover img { width: 100%; border: 1px solid var(--rule); }
 </style>

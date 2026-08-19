@@ -273,13 +273,50 @@ main { flex: 1 0 auto; }
   letter-spacing: .02em;
 }
 
+/* ---------- Streamed ("generating") text ---------- */
+/* JS wraps each word of a [data-stream] block in .tok and sets --i.
+   Tokens hold their layout position from the start, so the reveal reads as
+   output being printed rather than text reflowing line by line.
+   opacity (not visibility) keeps every word in the accessibility tree. */
+/* Hidden before first paint by the <head> script, so the full text never
+   flashes in before it streams. Revealed per block once tokenized. */
+.js-stream [data-stream] { opacity: 0; }
+.js-stream [data-stream].ready { opacity: 1; }
+
+.tok { opacity: 0; }
+.streaming .tok {
+  animation: tok-in .001s linear forwards;
+  animation-delay: calc(var(--i) * var(--tok-step, 9ms));
+}
+@keyframes tok-in { to { opacity: 1; } }
+
+/* No JS, or motion reduced: everything is simply visible. */
+.no-stream .tok,
+.streamed .tok { opacity: 1; animation: none; }
+
+/* Trailing caret that sits at the end of a block while it streams. */
+.stream-caret {
+  display: inline-block;
+  width: .55em;
+  height: 1.05em;
+  margin-left: .12em;
+  background: var(--text);
+  vertical-align: -0.15em;
+  animation: blink 1.15s steps(1, end) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .streaming .tok { animation: none; opacity: 1; }
+  .stream-caret { animation: none; }
+}
+
 /* Blinking block caret. */
 .caret {
   display: inline-block;
   width: .55em;
   height: 1.05em;
   margin-left: .18em;
-  background: var(--accent);
+  background: var(--text);
   vertical-align: -0.15em;
   animation: blink 1.15s steps(1, end) infinite;
 }

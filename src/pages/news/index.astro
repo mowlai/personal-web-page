@@ -1,6 +1,7 @@
 ---
 import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
 
 const items = (await getCollection('news', (n) => !n.data.draft)).sort(
   (a, b) => +b.data.date - +a.data.date
@@ -11,10 +12,10 @@ const fmt = (d: Date) =>
 ---
 
 <Base title="News" description="Awards, talks, papers, and milestones from Ryan Mowlai.">
-  <section class="section wrap">
-    <p class="eyebrow">News</p>
-    <h1>News</h1>
-    <p class="lede">Awards, talks, papers, and milestones, newest first.</p>
+  <div class="wrap page">
+    <PageHeader label="news" title="News" meta={`${items.length} entries`}>
+      Awards, talks, papers, and milestones, newest first.
+    </PageHeader>
 
     {items.length === 0 ? (
       <p class="empty">Nothing posted yet.</p>
@@ -48,12 +49,10 @@ const fmt = (d: Date) =>
         })}
       </ul>
     )}
-  </section>
+  </div>
 </Base>
 
 <style>
-  h1 { margin-bottom: var(--s-3); }
-  .lede { font-size: 1rem; color: var(--text-secondary); margin-bottom: var(--s-6); }
   .list { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
   .item {
     display: grid;

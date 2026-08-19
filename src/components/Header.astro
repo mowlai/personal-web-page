@@ -4,15 +4,12 @@ const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
 
-/** Nav labels render as filesystem paths: / , /publications , /projects … */
-const asPath = (href: string) => (href === '/' ? '~' : href);
+/** Nav labels are plain lowercase words: home, publications, projects, … */
+const label = (s: string) => s.toLowerCase();
 ---
 <header class="site-header">
   <div class="wrap bar">
-    <a href="/" class="brand" aria-label={site.name}>
-      <span class="brand__user">ryan</span><span class="brand__at">@</span><span
-        class="brand__host">rmowlai</span><span class="brand__sym">:~$</span>
-    </a>
+    <a href="/" class="brand">{site.name}</a>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only" />
     <label for="nav-toggle" class="nav-burger" aria-label="Toggle navigation">
@@ -25,7 +22,7 @@ const asPath = (href: string) => (href === '/' ? '~' : href);
           href={item.href}
           class:list={['nav__link', { 'is-active': isActive(item.href) }]}
           aria-current={isActive(item.href) ? 'page' : undefined}
-        >{asPath(item.href)}</a>
+        >{label(item.label)}</a>
       ))}
     </nav>
   </div>
@@ -48,19 +45,15 @@ const asPath = (href: string) => (href === '/' ? '~' : href);
     min-height: 56px;
   }
 
-  /* Shell prompt: ryan@rmowlai:~$ */
   .brand {
     font-size: .875rem;
-    letter-spacing: -0.01em;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: var(--text);
     border: 0;
     white-space: nowrap;
   }
-  .brand:hover { border: 0; }
-  .brand__user { color: var(--text); font-weight: 600; }
-  .brand__at,
-  .brand__sym { color: var(--gray-50); }
-  .brand__host { color: var(--accent); font-weight: 500; }
-  .brand:hover .brand__host { color: var(--accent-hover); }
+  .brand:hover { color: var(--accent); border: 0; }
 
   .nav { display: flex; align-items: center; gap: var(--s-5); }
   .nav__link {

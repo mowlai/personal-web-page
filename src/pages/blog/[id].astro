@@ -19,31 +19,29 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 ---
 
 <Base title={d.title} description={d.description} image={d.cover} type="article">
-  <article>
-    <header class="head wrap">
-      <a class="back" href="/blog">&larr; Blog</a>
+  <article class="wrap page">
+    <header class="page-head" data-stream>
+      <a class="back" href="/blog">&larr; blog</a>
       <div class="head__meta">
         <span class="tag tag--accent">{d.category}</span>
         <time class="meta" datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
         {d.updated && <span class="meta">Updated {fmt(d.updated)}</span>}
       </div>
       <h1>{d.title}</h1>
-      <p class="description">{d.description}</p>
+      <p class="lede">{d.description}</p>
       {d.tags.length > 0 && (
         <ul class="tags">{d.tags.map((t) => <li class="tag">{t}</li>)}</ul>
       )}
     </header>
 
     {d.cover && (
-      <div class="wrap">
-        <figure class="cover">
-          <img src={d.cover} alt={d.coverAlt} decoding="async" />
-          {d.coverAlt && <figcaption>{d.coverAlt}</figcaption>}
-        </figure>
-      </div>
+      <figure class="cover">
+        <img src={d.cover} alt={d.coverAlt} decoding="async" />
+        {d.coverAlt && <figcaption>{d.coverAlt}</figcaption>}
+      </figure>
     )}
 
-    <div class="wrap layout">
+    <div class="layout">
       {toc.length > 2 && (
         <aside class="toc">
           <p class="eyebrow">On this page</p>
@@ -67,7 +65,6 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 </Base>
 
 <style>
-  .head { padding-block: var(--s-7) var(--s-5); }
   .back {
     display: inline-block;
     font-size: .8125rem;
@@ -77,13 +74,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
   }
   .back:hover { color: var(--accent); border: 0; }
   .head__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3); }
-  h1 { margin-bottom: var(--s-3); max-width: 26ch; }
-  .description {
-    font-size: 1.0625rem;
-    color: var(--text-secondary);
-    max-width: var(--measure);
-    margin-bottom: var(--s-4);
-  }
+  .page-head .tags { margin-top: var(--s-4); }
 
   .cover { margin: 0 0 var(--s-6); }
   .cover img { width: 100%; border: 1px solid var(--rule); }
@@ -93,7 +84,6 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
     grid-template-columns: minmax(0, var(--measure)) 200px;
     gap: var(--s-8);
     align-items: start;
-    padding-bottom: var(--s-6);
   }
   .layout:not(:has(.toc)) { grid-template-columns: minmax(0, var(--measure)); }
 
