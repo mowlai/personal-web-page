@@ -1,0 +1,102 @@
+---
+import { site, nav } from '../data/site';
+const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
+const isActive = (href: string) =>
+  href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+---
+<header class="site-header">
+  <div class="wrap bar">
+    <a href="/" class="brand">
+      <span class="brand__name">{site.name}</span>
+      <span class="brand__role">{site.role}</span>
+    </a>
+
+    <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only" />
+    <label for="nav-toggle" class="nav-burger" aria-label="Toggle navigation">
+      <span></span><span></span><span></span>
+    </label>
+
+    <nav class="nav" aria-label="Primary">
+      {nav.map((item) => (
+        <a
+          href={item.href}
+          class:list={['nav__link', { 'is-active': isActive(item.href) }]}
+          aria-current={isActive(item.href) ? 'page' : undefined}
+        >{item.label}</a>
+      ))}
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(255, 255, 255, .92);
+    backdrop-filter: saturate(180%) blur(8px);
+    border-bottom: 1px solid var(--rule);
+  }
+  .bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--s-5);
+    min-height: 60px;
+  }
+
+  .brand { display: flex; flex-direction: column; line-height: 1.2; border: 0; color: var(--text); }
+  .brand:hover { color: var(--accent); border: 0; }
+  .brand__name { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
+  .brand__role {
+    font-family: var(--font-mono);
+    font-size: .6875rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .nav { display: flex; align-items: center; gap: var(--s-5); }
+  .nav__link {
+    position: relative;
+    font-size: .875rem;
+    font-weight: 400;
+    color: var(--text-secondary);
+    border: 0;
+    padding-block: 1.1rem;
+  }
+  .nav__link:hover { color: var(--text); border: 0; }
+  .nav__link.is-active { color: var(--text); font-weight: 500; }
+  .nav__link.is-active::after {
+    content: '';
+    position: absolute;
+    left: 0; right: 0; bottom: -1px;
+    height: 2px;
+    background: var(--accent);
+  }
+
+  /* --- mobile --- */
+  /* The checkbox stays sr-only rather than display:none so it remains
+     keyboard-focusable and the menu can be opened without a pointer. */
+  .nav-burger { display: none; }
+  @media (max-width: 720px) {
+    .bar { flex-wrap: wrap; }
+    .nav-burger {
+      display: flex; flex-direction: column; justify-content: center; gap: 4px;
+      width: 40px; height: 40px; cursor: pointer; padding: 8px;
+    }
+    .nav-burger span { display: block; height: 1.5px; background: var(--text); transition: .15s var(--ease); }
+    .nav {
+      display: none;
+      flex-basis: 100%;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 0;
+      padding-bottom: var(--s-2);
+    }
+    .nav-toggle:checked ~ .nav { display: flex; }
+    .nav__link { padding-block: .7rem; border-top: 1px solid var(--rule); }
+    .nav__link.is-active::after { display: none; }
+    .nav__link.is-active { color: var(--accent); }
+  }
+</style>

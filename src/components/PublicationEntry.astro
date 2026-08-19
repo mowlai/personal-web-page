@@ -1,0 +1,145 @@
+---
+import Icon from './Icon.astro';
+import { SELF, statusLabel, type Publication } from '../data/publications';
+
+interface Props { pub: Publication }
+const { pub } = Astro.props;
+---
+<article class="pub" id={pub.id}>
+  <div class="rail">
+    <span class="year">{pub.year}</span>
+    {pub.venueShort && <span class="venue-short">{pub.venueShort}</span>}
+  </div>
+
+  <div class="body">
+    <h3 class="title">{pub.title}</h3>
+
+    <p class="authors">
+      {pub.authors.map((a, i) => (
+        <>
+          {a === SELF ? <strong>{a}</strong> : <span>{a}</span>}{i < pub.authors.length - 1 ? ', ' : ''}
+        </>
+      ))}
+    </p>
+
+    <p class="venue">
+      {pub.venue}
+      <span class:list={['status', `status--${pub.status}`]}>{statusLabel[pub.status]}</span>
+    </p>
+
+    {pub.abstract && (
+      <details class="abstract">
+        <summary>Abstract</summary>
+        <p>{pub.abstract}</p>
+      </details>
+    )}
+
+    <div class="actions">
+      {(pub.links ?? []).map((l) => (
+        <a class="btn" href={l.href} target="_blank" rel="noopener noreferrer">
+          <Icon name={l.icon} size={13} />{l.label}
+        </a>
+      ))}
+      {pub.bibtex && (
+        <button class="btn js-cite" type="button" data-bibtex={pub.bibtex} aria-live="polite">
+          <Icon name="copy" size={13} /><span class="js-cite-label">Copy citation</span>
+        </button>
+      )}
+    </div>
+  </div>
+</article>
+
+<style>
+  .pub {
+    display: grid;
+    grid-template-columns: 108px 1fr;
+    gap: var(--s-5);
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--rule);
+  }
+  .pub:last-child { border-bottom: 0; }
+
+  .rail { display: flex; flex-direction: column; gap: var(--s-1); padding-top: 2px; }
+  .year {
+    font-family: var(--font-mono);
+    font-size: 1rem;
+    font-weight: 500;
+    color: var(--text);
+  }
+  .venue-short {
+    font-family: var(--font-mono);
+    font-size: .6875rem;
+    letter-spacing: .04em;
+    text-transform: uppercase;
+    color: var(--text-muted);
+  }
+
+  .title { font-size: 1.0625rem; line-height: 1.35; margin-bottom: var(--s-2); }
+  .authors { font-size: .875rem; color: var(--text-secondary); margin-bottom: var(--s-1); }
+  .authors strong { color: var(--text); font-weight: 600; }
+  .venue {
+    font-size: .875rem;
+    color: var(--text-muted);
+    font-style: italic;
+    margin-bottom: var(--s-3);
+    display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3);
+  }
+
+  .status {
+    font-family: var(--font-mono);
+    font-style: normal;
+    font-size: .625rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    padding: .15rem .4rem;
+    border: 1px solid var(--rule-strong);
+    color: var(--text-secondary);
+    background: var(--gray-10);
+  }
+  .status--published,
+  .status--accepted { color: var(--blue-80); background: var(--accent-wash); border-color: var(--blue-20); }
+
+  .abstract { margin-bottom: var(--s-3); }
+  .abstract summary {
+    cursor: pointer;
+    font-size: .8125rem;
+    color: var(--accent);
+    width: fit-content;
+    list-style: none;
+  }
+  .abstract summary::-webkit-details-marker { display: none; }
+  .abstract summary::before { content: '+ '; font-family: var(--font-mono); }
+  .abstract[open] summary::before { content: '\2212 '; }
+  .abstract p {
+    font-size: .875rem;
+    color: var(--text-secondary);
+    max-width: var(--measure);
+    margin: var(--s-2) 0 0;
+    padding-left: var(--s-3);
+    border-left: 2px solid var(--rule);
+  }
+
+  .actions { display: flex; flex-wrap: wrap; gap: var(--s-2); }
+
+  @media (max-width: 640px) {
+    .pub { grid-template-columns: 1fr; gap: var(--s-2); }
+    .rail { flex-direction: row; align-items: baseline; gap: var(--s-3); }
+    .venue-short { align-self: center; }
+  }
+</style>
+
+<script is:inline>
+  document.addEventListener('click', async (e) => {
+    const btn = e.target instanceof Element ? e.target.closest('.js-cite') : null;
+    if (!btn) return;
+    const label = btn.querySelector('.js-cite-label');
+    const prev = label.textContent;
+    try {
+      await navigator.clipboard.writeText(btn.dataset.bibtex);
+      label.textContent = 'Copied';
+    } catch {
+      label.textContent = 'Press Ctrl+C';
+    }
+    setTimeout(() => { label.textContent = prev; }, 1600);
+  });
+</script>

@@ -1,0 +1,116 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => !p.data.draft);
+  return posts.map((post) => ({ params: { id: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content, headings } = await render(post);
+const d = post.data;
+
+const fmt = (dt: Date) =>
+  dt.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+// Only h2/h3 make a useful table of contents.
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+---
+
+<Base title={d.title} description={d.description} image={d.cover} type="article">
+  <article>
+    <header class="head wrap">
+      <a class="back" href="/blog">&larr; Blog</a>
+      <div class="head__meta">
+        <span class="tag tag--accent">{d.category}</span>
+        <time class="meta" datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
+        {d.updated && <span class="meta">Updated {fmt(d.updated)}</span>}
+      </div>
+      <h1>{d.title}</h1>
+      <p class="description">{d.description}</p>
+      {d.tags.length > 0 && (
+        <ul class="tags">{d.tags.map((t) => <li class="tag">{t}</li>)}</ul>
+      )}
+    </header>
+
+    {d.cover && (
+      <div class="wrap">
+        <figure class="cover">
+          <img src={d.cover} alt={d.coverAlt} decoding="async" />
+          {d.coverAlt && <figcaption>{d.coverAlt}</figcaption>}
+        </figure>
+      </div>
+    )}
+
+    <div class="wrap layout">
+      {toc.length > 2 && (
+        <aside class="toc">
+          <p class="eyebrow">On this page</p>
+          <nav aria-label="Table of contents">
+            <ul>
+              {toc.map((h) => (
+                <li class:list={[`toc__d${h.depth}`]}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </aside>
+      )}
+
+      <div class="prose body">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .head { padding-block: var(--s-7) var(--s-5); }
+  .back {
+    display: inline-block;
+    font-size: .8125rem;
+    color: var(--text-secondary);
+    margin-bottom: var(--s-4);
+    border: 0;
+  }
+  .back:hover { color: var(--accent); border: 0; }
+  .head__meta { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s-3); margin-bottom: var(--s-3); }
+  h1 { margin-bottom: var(--s-3); max-width: 26ch; }
+  .description {
+    font-size: 1.0625rem;
+    color: var(--text-secondary);
+    max-width: var(--measure);
+    margin-bottom: var(--s-4);
+  }
+
+  .cover { margin: 0 0 var(--s-6); }
+  .cover img { width: 100%; border: 1px solid var(--rule); }
+
+  .layout {
+    display: grid;
+    grid-template-columns: minmax(0, var(--measure)) 200px;
+    gap: var(--s-8);
+    align-items: start;
+    padding-bottom: var(--s-6);
+  }
+  .layout:not(:has(.toc)) { grid-template-columns: minmax(0, var(--measure)); }
+
+  .toc {
+    position: sticky;
+    top: 84px;
+    order: 2;
+    border-left: 1px solid var(--rule);
+    padding-left: var(--s-4);
+  }
+  .toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--s-2); }
+  .toc a { font-size: .8125rem; color: var(--text-secondary); border: 0; line-height: 1.4; display: block; }
+  .toc a:hover { color: var(--accent); border: 0; }
+  .toc__d3 { padding-left: var(--s-3); }
+
+  @media (max-width: 900px) {
+    .layout { grid-template-columns: 1fr; gap: var(--s-5); }
+    .toc { position: static; order: -1; border-left: 0; border-top: 1px solid var(--rule); padding: var(--s-4) 0 0; }
+  }
+</style>

@@ -1,0 +1,109 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+  /** Absolute-from-root path to a social preview image. */
+  image?: string;
+  type?: 'website' | 'article';
+}
+const {
+  title,
+  description = site.description,
+  image = '/images/ryan-mowlai.jpg',
+  type = 'website',
+} = Astro.props;
+
+const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
+const ogImage = new URL(image, Astro.site ?? site.url).href;
+---
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{pageTitle}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content={site.name} />
+    <meta name="keywords" content={site.keywords.join(', ')} />
+    <link rel="canonical" href={canonical} />
+
+    <meta property="og:type" content={type} />
+    <meta property="og:title" content={pageTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:site_name" content={site.name} />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={pageTitle} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+
+    <meta name="theme-color" content="#ffffff" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/images/ryan-mowlai.jpg" />
+    <link rel="sitemap" href="/sitemap-index.xml" />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+    />
+
+    <script type="application/ld+json" is:inline set:html={JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'Person',
+      name: site.name,
+      jobTitle: site.role,
+      url: site.url,
+      image: `${site.url}/images/ryan-mowlai.jpg`,
+      affiliation: { '@type': 'CollegeOrUniversity', name: 'University of Arizona' },
+      sameAs: ['https://github.com/mowlai', 'https://linkedin.com/in/ryanmrm'],
+    })} />
+  </head>
+
+  <body>
+    <a href="#main" class="skip-link">Skip to content</a>
+    <Header />
+    <main id="main"><slot /></main>
+    <Footer />
+
+    <script is:inline>
+      /* Resolves .js-email links from their encoded token, on user intent only.
+         See components/Email.astro. */
+      (() => {
+        const decode = (t) =>
+          atob(t).replace(/[a-z]/g, (c) =>
+            String.fromCharCode(((c.charCodeAt(0) - 97 + 13) % 26) + 97)
+          );
+        const scheme = ['ma', 'il', 'to'].join('') + String.fromCharCode(58);
+
+        const arm = (el) => {
+          if (el.dataset.armed) return;
+          el.dataset.armed = '1';
+          el.setAttribute('href', scheme + decode(el.dataset.e));
+        };
+
+        document.querySelectorAll('.js-email').forEach((el) => {
+          ['mouseenter', 'focus', 'touchstart'].forEach((ev) =>
+            el.addEventListener(ev, () => arm(el), { once: true, passive: true })
+          );
+          el.addEventListener('click', (e) => {
+            if (!el.dataset.armed) {
+              e.preventDefault();
+              arm(el);
+              location.href = el.getAttribute('href');
+            }
+          });
+        });
+      })();
+    </script>
+  </body>
+</html>

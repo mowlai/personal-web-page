@@ -1,0 +1,60 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PostRow from '../../components/PostRow.astro';
+
+const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
+  (a, b) => +b.data.date - +a.data.date
+);
+---
+
+<Base
+  title="Blog"
+  description="Technical deep-dives by Ryan Mowlai: implementation walkthroughs, paper summaries, and industry case studies in machine learning."
+>
+  <section class="section wrap">
+    <p class="eyebrow">Writing</p>
+    <h1>Blog</h1>
+    <p class="lede">
+      Three kinds of posts: <strong>implementation breakdowns</strong> of methods I
+      actually run, <strong>paper summaries</strong> that compress a dense result into
+      a five-minute read, and <strong>case studies</strong> on deploying ML against
+      real industrial processes.
+    </p>
+
+    {posts.length === 0 ? (
+      <p class="empty">First posts are in the works.</p>
+    ) : (
+      <div class="list">
+        {posts.map((p) => (
+          <PostRow
+            href={`/blog/${p.id}/`}
+            title={p.data.title}
+            description={p.data.description}
+            date={p.data.date}
+            category={p.data.category}
+            tags={p.data.tags}
+          />
+        ))}
+      </div>
+    )}
+
+    <p class="rss meta">
+      <a href="/rss.xml">RSS feed</a>
+    </p>
+  </section>
+</Base>
+
+<style>
+  h1 { margin-bottom: var(--s-3); }
+  .lede {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: var(--measure);
+    margin-bottom: var(--s-6);
+  }
+  .lede strong { color: var(--text); font-weight: 600; }
+  .list { border-top: 1px solid var(--rule); }
+  .empty { color: var(--text-muted); }
+  .rss { margin-top: var(--s-6); }
+</style>

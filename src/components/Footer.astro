@@ -1,0 +1,45 @@
+---
+import { site, profiles } from '../data/site';
+import Email from './Email.astro';
+import Icon from './Icon.astro';
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="wrap inner">
+    <p class="copy meta">© {year} {site.name}</p>
+    <ul class="links">
+      {profiles.map((p) => (
+        <li>
+          <a href={p.href} target="_blank" rel="noopener noreferrer">
+            <Icon name={p.icon} size={14} /> {p.label}
+          </a>
+        </li>
+      ))}
+      <li><Email><Icon name="mail" size={14} /> Email</Email></li>
+    </ul>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    flex: none;
+    border-top: 1px solid var(--rule);
+    background: var(--bg-subtle);
+    margin-top: var(--s-9);
+    padding-block: var(--s-5);
+  }
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: var(--s-4);
+  }
+  .copy { margin: 0; }
+  .links { display: flex; flex-wrap: wrap; gap: var(--s-5); list-style: none; margin: 0; padding: 0; }
+  .links a {
+    display: inline-flex; align-items: center; gap: .4rem;
+    font-size: .8125rem; color: var(--text-secondary); border: 0;
+  }
+  .links a:hover { color: var(--accent); border: 0; }
+</style>

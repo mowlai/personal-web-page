@@ -1,0 +1,58 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import ProjectCard from '../../components/ProjectCard.astro';
+
+const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
+  (a, b) => +b.data.date - +a.data.date
+);
+---
+
+<Base
+  title="Projects"
+  description="Applied machine learning systems built by Ryan Mowlai: autonomous water treatment, RL control, multimodal sensing, and LLM tooling."
+>
+  <section class="section wrap">
+    <p class="eyebrow">Projects</p>
+    <h1>Projects</h1>
+    <p class="lede">
+      Systems I have built end to end, not just written about: control frameworks,
+      forecasting pipelines, and the tooling around them. Each entry links to code
+      or data where the work is public.
+    </p>
+
+    {projects.length === 0 ? (
+      <p class="empty">No projects published yet.</p>
+    ) : (
+      <div class="grid">
+        {projects.map((p) => (
+          <ProjectCard
+            href={`/projects/${p.id}/`}
+            title={p.data.title}
+            summary={p.data.summary}
+            period={p.data.period}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            coverAlt={p.data.coverAlt}
+          />
+        ))}
+      </div>
+    )}
+  </section>
+</Base>
+
+<style>
+  h1 { margin-bottom: var(--s-3); }
+  .lede {
+    font-size: 1rem;
+    color: var(--text-secondary);
+    max-width: var(--measure);
+    margin-bottom: var(--s-7);
+  }
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: var(--s-5);
+  }
+  .empty { color: var(--text-muted); }
+</style>

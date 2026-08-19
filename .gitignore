@@ -1,10 +1,10 @@
-# IDEs
-.idea/
-
-# Hugo
-resources/
-public/
-jsconfig.json
 node_modules/
-go.sum
-.hugo_build.lock
+dist/
+.astro/
+.DS_Store
+*.log
+.env
+.env.production
+
+# Local-only maintenance notes — never publish
+*.local.md

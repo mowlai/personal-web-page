@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Multimodal Spectral Drug Detection">
+  <defs>
+    <pattern id="g" width="24" height="24" patternUnits="userSpaceOnUse">
+      <path d="M24 0H0v24" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="675" fill="#f4f4f4"/>
+  <rect width="1200" height="675" fill="url(#g)"/>
+  <rect x="0" y="0" width="1200" height="6" fill="#0f62fe"/>
+  <text x="64" y="330" font-family="IBM Plex Sans, Segoe UI, sans-serif" font-size="44" font-weight="600" fill="#161616">Multimodal Spectral Drug Detection</text>
+  <text x="64" y="382" font-family="IBM Plex Mono, monospace" font-size="20" fill="#6f6f6f">PLACEHOLDER — replace in public/images/</text>
+</svg>

@@ -1,0 +1,263 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import Icon from '../components/Icon.astro';
+import Email from '../components/Email.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import { site, profiles } from '../data/site';
+import { publications } from '../data/publications';
+
+const featured = (await getCollection('projects', (p) => !p.data.draft && p.data.featured))
+  .sort((a, b) => a.data.order - b.data.order || +b.data.date - +a.data.date)
+  .slice(0, 3);
+
+const news = (await getCollection('news', (n) => !n.data.draft))
+  .sort((a, b) => +b.data.date - +a.data.date)
+  .slice(0, 4);
+
+const recentPubs = publications.slice(0, 3);
+
+const focus = [
+  {
+    heading: 'Reinforcement learning for control',
+    body: 'Deep RL policies that run real ultrafiltration plants, maximizing net water production under hard operating and safety constraints.',
+  },
+  {
+    heading: 'Foundation models for process data',
+    body: 'Pretraining and post-training time-series models on plant telemetry, then adapting them per-site for forecasting and control.',
+  },
+  {
+    heading: 'Agentic AI with guardrails',
+    body: 'Controllers that turn forecasts into setpoints, with constraint verification sitting between the model and the actuator.',
+  },
+];
+---
+
+<Base>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="wrap hero__inner">
+      <div class="hero__text">
+        <p class="eyebrow">{site.role}</p>
+        <h1>{site.name}</h1>
+        <p class="hero__affil">{site.affiliation}</p>
+
+        <p class="hero__pitch">
+          I build machine learning systems that <strong>run physical infrastructure</strong>.
+          My doctoral work, conducted with the U.S. Army Corps of Engineers, develops
+          reinforcement learning policies, time-series foundation models, and agentic
+          controllers for <strong>autonomous water treatment</strong>: turning raw plant
+          telemetry into forecasts, and forecasts into verified control setpoints.
+          Before Arizona I shipped RL-based building energy controllers to production in
+          Milan, and I have since worked on multimodal sensing at Lightsense and
+          LLM-driven audience modeling at IBM.
+        </p>
+
+        <div class="hero__links">
+          {profiles.map((p) => (
+            <a class="btn" href={p.href} target="_blank" rel="noopener noreferrer">
+              <Icon name={p.icon} size={14} />{p.label}
+            </a>
+          ))}
+          <Email variant="btn"><Icon name="mail" size={14} />Email</Email>
+        </div>
+      </div>
+
+      <figure class="hero__photo">
+        <img
+          src="/images/ryan-mowlai.jpg"
+          alt={`Portrait of ${site.name}`}
+          width="440"
+          height="523"
+          fetchpriority="high"
+          decoding="async"
+        />
+      </figure>
+    </div>
+  </section>
+
+  <!-- Research focus -->
+  <section class="section wrap">
+    <div class="section-head"><h2>Research focus</h2></div>
+    <div class="focus">
+      {focus.map((f) => (
+        <div class="focus__item">
+          <h3>{f.heading}</h3>
+          <p>{f.body}</p>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Selected projects -->
+  {featured.length > 0 && (
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>Selected projects</h2>
+        <a class="more link-arrow" href="/projects">All projects</a>
+      </div>
+      <div class="grid">
+        {featured.map((p) => (
+          <ProjectCard
+            href={`/projects/${p.id}/`}
+            title={p.data.title}
+            summary={p.data.summary}
+            period={p.data.period}
+            tags={p.data.tags}
+            cover={p.data.cover}
+            coverAlt={p.data.coverAlt}
+          />
+        ))}
+      </div>
+    </section>
+  )}
+
+  <!-- Recent publications -->
+  <section class="section wrap">
+    <div class="section-head">
+      <h2>Recent publications</h2>
+      <a class="more link-arrow" href="/publications">Full list</a>
+    </div>
+    <ol class="pubs">
+      {recentPubs.map((p) => (
+        <li class="pubs__item">
+          <span class="pubs__year meta">{p.year}</span>
+          <span class="pubs__body">
+            <a href={`/publications#${p.id}`}>{p.title}</a>
+            <span class="pubs__venue">{p.venueShort ?? p.venue}</span>
+          </span>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <!-- News -->
+  {news.length > 0 && (
+    <section class="section wrap">
+      <div class="section-head">
+        <h2>News</h2>
+        <a class="more link-arrow" href="/news">All news</a>
+      </div>
+      <ul class="news">
+        {news.map((n) => (
+          <li class="news__item">
+            <time class="meta news__date" datetime={n.data.date.toISOString().slice(0, 10)}>
+              {n.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
+            </time>
+            <span class="news__text">
+              <a
+                href={n.data.href ?? `/news/${n.id}/`}
+                {...(n.data.href ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+              >{n.data.title}</a>
+              <span class="news__summary">{n.data.summary}</span>
+            </span>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
+</Base>
+
+<style>
+  /* Hero */
+  .hero {
+    border-bottom: 1px solid var(--rule);
+    background: linear-gradient(180deg, var(--gray-10) 0%, var(--white) 100%);
+  }
+  .hero__inner {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 260px;
+    gap: var(--s-8);
+    align-items: start;
+    padding-block: var(--s-9) var(--s-8);
+  }
+  .hero h1 { margin-bottom: var(--s-2); }
+  .hero__affil {
+    font-size: .9375rem;
+    color: var(--text-secondary);
+    max-width: 46ch;
+    margin-bottom: var(--s-5);
+    padding-left: var(--s-3);
+    border-left: 2px solid var(--accent);
+  }
+  .hero__pitch {
+    font-size: 1.0625rem;
+    line-height: 1.65;
+    max-width: var(--measure);
+    color: var(--gray-90);
+  }
+  .hero__pitch strong { font-weight: 600; color: var(--text); }
+  .hero__links { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-5); }
+
+  .hero__photo { margin: 0; }
+  .hero__photo img {
+    width: 100%;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+    object-position: center 18%;
+    border: 1px solid var(--rule-strong);
+  }
+
+  @media (max-width: 800px) {
+    .hero__inner {
+      grid-template-columns: 1fr;
+      gap: var(--s-6);
+      padding-block: var(--s-7) var(--s-6);
+    }
+    .hero__photo { order: -1; max-width: 168px; }
+  }
+
+  /* Focus */
+  .focus {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: var(--s-5);
+  }
+  .focus__item { border-top: 2px solid var(--accent); padding-top: var(--s-3); }
+  .focus__item h3 { font-size: 1rem; margin-bottom: var(--s-2); }
+  .focus__item p { font-size: .9375rem; color: var(--text-secondary); margin: 0; }
+
+  /* Project grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--s-5);
+  }
+
+  /* Compact publication list */
+  .pubs { list-style: none; margin: 0; padding: 0; }
+  .pubs__item {
+    display: grid;
+    grid-template-columns: 68px 1fr;
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .pubs__item:last-child { border-bottom: 0; }
+  .pubs__year { padding-top: 2px; }
+  .pubs__body { display: flex; flex-direction: column; gap: .15rem; }
+  .pubs__body a { font-size: .9375rem; color: var(--text); border: 0; }
+  .pubs__body a:hover { color: var(--accent); border: 0; }
+  .pubs__venue { font-size: .8125rem; color: var(--text-muted); font-style: italic; }
+
+  /* News list */
+  .news { list-style: none; margin: 0; padding: 0; }
+  .news__item {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    gap: var(--s-4);
+    padding-block: var(--s-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .news__item:last-child { border-bottom: 0; }
+  .news__date { padding-top: 2px; }
+  .news__text { display: flex; flex-direction: column; gap: .15rem; }
+  .news__text > a { font-size: .9375rem; font-weight: 500; color: var(--text); border: 0; }
+  .news__text > a:hover { color: var(--accent); border: 0; }
+  .news__summary { font-size: .875rem; color: var(--text-secondary); }
+
+  @media (max-width: 560px) {
+    .pubs__item,
+    .news__item { grid-template-columns: 1fr; gap: var(--s-1); }
+  }
+</style>

@@ -1,0 +1,25 @@
+---
+/**
+ * Bot-resistant email link.
+ *
+ * The HTML carries only an encoded token — no address, no scheme, nothing that
+ * matches an email pattern. The decoder lives in `layouts/Base.astro` so it is
+ * emitted once per page rather than once per link, and it resolves the address
+ * only on real user interaction.
+ *
+ * Regenerate the token after changing the address:
+ *   node -e "const s='new@address.com';const r=s.replace(/[a-z]/g,c=>String.fromCharCode((c.charCodeAt(0)-97+13)%26+97));console.log(Buffer.from(r).toString('base64'))"
+ */
+interface Props { label?: string; class?: string; variant?: 'link' | 'btn' }
+const { label = 'Email', class: cls = '', variant = 'link' } = Astro.props;
+
+const token = 'emJqeW52LnpiQHR6bnZ5LnBieg==';
+const klass = variant === 'btn' ? `btn ${cls}` : cls;
+---
+
+<a href="#" class={`js-email ${klass}`} data-e={token} rel="nofollow noopener">
+  <slot>{label}</slot>
+</a>
+<noscript>
+  <span class="meta">mowlai.mo [at] gmail [dot] com</span>
+</noscript>

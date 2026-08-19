@@ -1,0 +1,50 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  date: Date;
+  category?: string;
+  tags?: string[];
+  external?: boolean;
+}
+const { href, title, description, date, category, tags = [], external = false } = Astro.props;
+const dt = date.toISOString().slice(0, 10);
+const human = date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+---
+<article class="row">
+  <div class="row__rail">
+    <time class="meta" datetime={dt}>{human}</time>
+    {category && <span class="tag tag--accent">{category}</span>}
+  </div>
+  <div class="row__body">
+    <h3 class="row__title">
+      <a href={href} {...external ? { target: '_blank', rel: 'noopener noreferrer' } : {}}>{title}</a>
+    </h3>
+    <p class="row__desc">{description}</p>
+    {tags.length > 0 && (
+      <ul class="tags"> {tags.map((t) => <li class="tag">{t}</li>)}</ul>
+    )}
+  </div>
+</article>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: var(--s-5);
+    padding-block: var(--s-5);
+    border-bottom: 1px solid var(--rule);
+  }
+  .row:last-child { border-bottom: 0; }
+  .row__rail { display: flex; flex-direction: column; align-items: flex-start; gap: var(--s-2); padding-top: 3px; }
+  .row__title { font-size: 1.0625rem; line-height: 1.35; margin-bottom: var(--s-2); }
+  .row__title a { color: var(--text); border: 0; }
+  .row__title a:hover { color: var(--accent); border: 0; }
+  .row__desc { font-size: .9375rem; color: var(--text-secondary); max-width: var(--measure); margin-bottom: var(--s-3); }
+
+  @media (max-width: 640px) {
+    .row { grid-template-columns: 1fr; gap: var(--s-2); }
+    .row__rail { flex-direction: row; align-items: center; }
+  }
+</style>
