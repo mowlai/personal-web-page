@@ -7,7 +7,7 @@ export const site = {
   title: 'Ryan Mowlai',
   role: 'Machine Learning Research Scientist',
   affiliation: 'Ph.D. Candidate, Systems & Industrial Engineering (minor in Computer Science), University of Arizona',
-  url: 'https://mowlai.com',
+  url: 'https://rmowlai.com',
   description:
     'Ryan Mowlai — machine learning research scientist working on reinforcement learning, agentic AI, and foundation models for autonomous water treatment systems.',
   keywords: [
