@@ -3,12 +3,15 @@ import { site, nav } from '../data/site';
 const path = Astro.url.pathname.replace(/\/+$/, '') || '/';
 const isActive = (href: string) =>
   href === '/' ? path === '/' : path === href || path.startsWith(href + '/');
+
+/** Nav labels render as filesystem paths: / , /publications , /projects … */
+const asPath = (href: string) => (href === '/' ? '~' : href);
 ---
 <header class="site-header">
   <div class="wrap bar">
-    <a href="/" class="brand">
-      <span class="brand__name">{site.name}</span>
-      <span class="brand__role">{site.role}</span>
+    <a href="/" class="brand" aria-label={site.name}>
+      <span class="brand__user">ryan</span><span class="brand__at">@</span><span
+        class="brand__host">rmowlai</span><span class="brand__sym">:~$</span>
     </a>
 
     <input type="checkbox" id="nav-toggle" class="nav-toggle sr-only" />
@@ -22,7 +25,7 @@ const isActive = (href: string) =>
           href={item.href}
           class:list={['nav__link', { 'is-active': isActive(item.href) }]}
           aria-current={isActive(item.href) ? 'page' : undefined}
-        >{item.label}</a>
+        >{asPath(item.href)}</a>
       ))}
     </nav>
   </div>
@@ -33,7 +36,7 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: 50;
-    background: rgba(255, 255, 255, .92);
+    background: rgba(255, 255, 255, .93);
     backdrop-filter: saturate(180%) blur(8px);
     border-bottom: 1px solid var(--rule);
   }
@@ -42,31 +45,33 @@ const isActive = (href: string) =>
     align-items: center;
     justify-content: space-between;
     gap: var(--s-5);
-    min-height: 60px;
+    min-height: 56px;
   }
 
-  .brand { display: flex; flex-direction: column; line-height: 1.2; border: 0; color: var(--text); }
-  .brand:hover { color: var(--accent); border: 0; }
-  .brand__name { font-size: 1rem; font-weight: 600; letter-spacing: -0.01em; }
-  .brand__role {
-    font-family: var(--font-mono);
-    font-size: .6875rem;
-    letter-spacing: .04em;
-    text-transform: uppercase;
-    color: var(--text-muted);
+  /* Shell prompt: ryan@rmowlai:~$ */
+  .brand {
+    font-size: .875rem;
+    letter-spacing: -0.01em;
+    border: 0;
+    white-space: nowrap;
   }
+  .brand:hover { border: 0; }
+  .brand__user { color: var(--text); font-weight: 600; }
+  .brand__at,
+  .brand__sym { color: var(--gray-50); }
+  .brand__host { color: var(--accent); font-weight: 500; }
+  .brand:hover .brand__host { color: var(--accent-hover); }
 
   .nav { display: flex; align-items: center; gap: var(--s-5); }
   .nav__link {
     position: relative;
-    font-size: .875rem;
-    font-weight: 400;
-    color: var(--text-secondary);
+    font-size: .8125rem;
+    color: var(--text-muted);
     border: 0;
-    padding-block: 1.1rem;
+    padding-block: 1.05rem;
   }
   .nav__link:hover { color: var(--text); border: 0; }
-  .nav__link.is-active { color: var(--text); font-weight: 500; }
+  .nav__link.is-active { color: var(--accent); }
   .nav__link.is-active::after {
     content: '';
     position: absolute;
@@ -95,8 +100,7 @@ const isActive = (href: string) =>
       padding-bottom: var(--s-2);
     }
     .nav-toggle:checked ~ .nav { display: flex; }
-    .nav__link { padding-block: .7rem; border-top: 1px solid var(--rule); }
+    .nav__link { padding-block: .65rem; border-top: 1px solid var(--rule); }
     .nav__link.is-active::after { display: none; }
-    .nav__link.is-active { color: var(--accent); }
   }
 </style>

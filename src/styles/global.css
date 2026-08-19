@@ -33,15 +33,17 @@
   --accent-hover:  var(--blue-70);
   --accent-wash:   #edf3ff;
 
-  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
+  /* Monospace is the interface font, not just the code font. IBM Plex Sans is
+     kept only for the rare element that must not be mono. */
   --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-sans: 'IBM Plex Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
 
   /* Carbon 8px spacing scale */
   --s-1: .25rem; --s-2: .5rem;  --s-3: .75rem; --s-4: 1rem;
   --s-5: 1.5rem; --s-6: 2rem;   --s-7: 2.5rem; --s-8: 3rem;
   --s-9: 4rem;   --s-10: 5rem;
 
-  --measure: 68ch;
+  --measure: 74ch;
   --page: 1080px;
   --ease: cubic-bezier(.2, 0, .38, .9); /* Carbon productive */
 }
@@ -61,9 +63,9 @@ body {
   margin: 0;
   background: var(--bg);
   color: var(--text);
-  font-family: var(--font-sans);
-  font-size: 1rem;
-  line-height: 1.6;
+  font-family: var(--font-mono);
+  font-size: .9375rem;
+  line-height: 1.7;
   font-weight: 400;
   letter-spacing: 0;
   -webkit-font-smoothing: antialiased;
@@ -76,15 +78,24 @@ body {
 /* ---------- Type ---------- */
 h1, h2, h3, h4 {
   margin: 0;
+  font-family: var(--font-mono);
   font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -0.01em;
+  line-height: 1.3;
+  letter-spacing: -0.02em;
   color: var(--text);
 }
-h1 { font-size: clamp(1.9rem, 1.4rem + 2vw, 2.75rem); letter-spacing: -0.02em; }
-h2 { font-size: clamp(1.3rem, 1.15rem + .6vw, 1.6rem); }
-h3 { font-size: 1.125rem; }
-h4 { font-size: 1rem; }
+h1 { font-size: clamp(1.6rem, 1.25rem + 1.7vw, 2.25rem); }
+h2 { font-size: clamp(1.15rem, 1.05rem + .5vw, 1.375rem); }
+h3 { font-size: 1.0625rem; }
+h4 { font-size: .9375rem; }
+
+/* Headings read as shell comments. */
+.prose h2::before,
+.prose h3::before {
+  content: '// ';
+  color: var(--gray-30);
+  font-weight: 400;
+}
 p  { margin: 0 0 var(--s-4); }
 
 a {
@@ -146,16 +157,16 @@ main { flex: 1 0 auto; }
 .section { padding-block: var(--s-8); }
 .section + .section { padding-top: 0; }
 
-/* Small caps section label — the Carbon "productive" tag */
+/* Section label, styled as a shell comment: // publications */
 .eyebrow {
-  font-family: var(--font-mono);
   font-size: .75rem;
   font-weight: 500;
-  letter-spacing: .08em;
-  text-transform: uppercase;
+  letter-spacing: .04em;
+  text-transform: lowercase;
   color: var(--text-muted);
   margin: 0 0 var(--s-3);
 }
+.eyebrow::before { content: '// '; color: var(--gray-30); }
 
 .section-head {
   display: flex;
@@ -193,24 +204,33 @@ main { flex: 1 0 auto; }
   align-items: center;
   gap: .45rem;
   font-size: .8125rem;
-  font-weight: 500;
+  font-weight: 400;
   line-height: 1;
-  padding: .55rem .85rem;
-  border: 1px solid var(--rule-strong);
+  padding: .5rem .7rem;
+  border: 1px solid var(--rule);
   background: var(--white);
-  color: var(--text);
+  color: var(--text-secondary);
   cursor: pointer;
-  font-family: inherit;
+  font-family: var(--font-mono);
   border-radius: 0;
   transition: background .11s var(--ease), border-color .11s var(--ease), color .11s var(--ease);
 }
-.btn:hover { background: var(--gray-10); border-color: var(--gray-50); color: var(--text); }
+.btn::before { content: '['; color: var(--gray-30); }
+.btn::after  { content: ']'; color: var(--gray-30); }
+.btn:hover {
+  background: var(--white);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+.btn:hover::before, .btn:hover::after { color: var(--accent); }
 .btn--primary {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--white);
 }
 .btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--white); }
+.btn--primary::before, .btn--primary::after,
+.btn--primary:hover::before, .btn--primary:hover::after { color: var(--blue-20); }
 .btn svg { width: 14px; height: 14px; flex: none; }
 
 /* Icon + label link. Global rather than scoped: <Email> renders its own
@@ -252,6 +272,19 @@ main { flex: 1 0 auto; }
   color: var(--text-muted);
   letter-spacing: .02em;
 }
+
+/* Blinking block caret. */
+.caret {
+  display: inline-block;
+  width: .55em;
+  height: 1.05em;
+  margin-left: .18em;
+  background: var(--accent);
+  vertical-align: -0.15em;
+  animation: blink 1.15s steps(1, end) infinite;
+}
+@keyframes blink { 0%, 50% { opacity: 1; } 50.01%, 100% { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .caret { animation: none; } }
 
 .sr-only {
   position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;

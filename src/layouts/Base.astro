@@ -10,12 +10,15 @@ interface Props {
   /** Absolute-from-root path to a social preview image. */
   image?: string;
   type?: 'website' | 'article';
+  /** The home page stands alone; every other page keeps the footer. */
+  footer?: boolean;
 }
 const {
   title,
   description = site.description,
   image = '/images/ryan-mowlai.jpg',
   type = 'website',
+  footer = true,
 } = Astro.props;
 
 const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
@@ -54,7 +57,7 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
       rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap"
+      href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     />
 
     <script type="application/ld+json" is:inline set:html={JSON.stringify({
@@ -73,7 +76,7 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
     <a href="#main" class="skip-link">Skip to content</a>
     <Header />
     <main id="main"><slot /></main>
-    <Footer />
+    {footer && <Footer />}
 
     <script is:inline>
       /* Resolves .js-email links from their encoded token, on user intent only.

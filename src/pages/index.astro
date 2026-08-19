@@ -10,7 +10,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   .slice(0, 3);
 ---
 
-<Base>
+<Base footer={false}>
   <div class="wrap home">
     <!-- Identity -->
     <section class="intro">
@@ -24,8 +24,8 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
         decoding="async"
       />
 
-      <div class="intro__text">
-        <h1 class="intro__name">{site.name}</h1>
+      <div>
+        <h1 class="intro__name">{site.name}<span class="caret" aria-hidden="true"></span></h1>
         <p class="intro__role">{site.role}</p>
         <p class="intro__affil">{site.affiliation}</p>
       </div>
@@ -44,10 +44,10 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
       <nav class="links" aria-label="Profiles">
         {profiles.map((p) => (
           <a class="iconlink iconlink--lg" href={p.href} target="_blank" rel="noopener noreferrer">
-            <Icon name={p.icon} size={15} />{p.label}
+            <Icon name={p.icon} size={14} />{p.label.toLowerCase()}
           </a>
         ))}
-        <Email class="iconlink iconlink--lg"><Icon name="mail" size={15} />Email</Email>
+        <Email class="iconlink iconlink--lg"><Icon name="mail" size={14} />email</Email>
       </nav>
     </section>
 
@@ -55,8 +55,8 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     {featured.length > 0 && (
       <section class="work">
         <div class="work__head">
-          <h2 class="eyebrow">Selected work</h2>
-          <a class="work__all" href="/projects">All projects &rarr;</a>
+          <h2 class="work__label">selected work</h2>
+          <a class="work__all" href="/projects">/projects &rarr;</a>
         </div>
 
         <ul class="work__list">
@@ -77,8 +77,8 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 
 <style>
   .home {
-    max-width: 760px;
-    padding-block: var(--s-10) var(--s-9);
+    max-width: 780px;
+    padding-block: var(--s-9) var(--s-9);
   }
   @media (max-width: 640px) {
     .home { padding-block: var(--s-7) var(--s-8); }
@@ -92,64 +92,63 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     margin-bottom: var(--s-7);
   }
   .intro__photo {
-    width: 132px;
-    height: 132px;
+    width: 124px;
+    height: 124px;
     flex: none;
     object-fit: cover;
     object-position: center 18%;
-    border-radius: 50%;
-    /* Hairline ring plus a soft outer halo — the only ornament on the page. */
-    box-shadow:
-      0 0 0 1px var(--rule-strong),
-      0 0 0 8px var(--gray-10);
+    /* Square, not round — closer to a terminal window than a social avatar. */
+    border: 1px solid var(--rule-strong);
+    filter: grayscale(1) contrast(1.02);
+    transition: filter .25s var(--ease);
   }
+  .intro__photo:hover { filter: grayscale(0); }
+
   .intro__name {
-    font-size: clamp(2rem, 1.5rem + 2.2vw, 2.75rem);
-    letter-spacing: -0.03em;
-    line-height: 1.05;
+    font-size: clamp(1.6rem, 1.2rem + 1.9vw, 2.25rem);
+    font-weight: 600;
+    letter-spacing: -0.035em;
+    line-height: 1.1;
     margin-bottom: var(--s-2);
   }
   .intro__role {
-    font-family: var(--font-mono);
-    font-size: .78rem;
-    font-weight: 500;
-    letter-spacing: .1em;
-    text-transform: uppercase;
+    font-size: .8125rem;
+    letter-spacing: .02em;
     color: var(--accent);
     margin: 0 0 var(--s-2);
   }
+  /* Renders as: > machine learning research scientist */
+  .intro__role::before { content: '> '; color: var(--gray-30); }
+
   .intro__affil {
-    font-size: .9375rem;
-    line-height: 1.5;
-    color: var(--text-secondary);
+    font-size: .8125rem;
+    line-height: 1.6;
+    color: var(--text-muted);
     margin: 0;
-    max-width: 42ch;
+    max-width: 46ch;
   }
 
   @media (max-width: 560px) {
     .intro { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
-    .intro__photo { width: 104px; height: 104px; }
+    .intro__photo { width: 100px; height: 100px; }
   }
 
   /* ---------- Summary ---------- */
   .summary p {
-    font-size: 1.125rem;
-    line-height: 1.7;
+    font-size: .9375rem;
+    line-height: 1.85;
     color: var(--gray-90);
     margin: 0 0 var(--s-5);
-  }
-  @media (max-width: 560px) {
-    .summary p { font-size: 1.0625rem; }
+    max-width: var(--measure);
+    /* Hanging rule down the left, like a quoted block in a terminal. */
+    padding-left: var(--s-4);
+    border-left: 2px solid var(--rule);
   }
 
-  .links {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--s-5);
-  }
+  .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
 
   /* ---------- Selected work ---------- */
-  .work { margin-top: var(--s-9); }
+  .work { margin-top: var(--s-8); }
   .work__head {
     display: flex;
     align-items: baseline;
@@ -158,8 +157,14 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     padding-bottom: var(--s-3);
     border-bottom: 1px solid var(--rule);
   }
-  .work__head .eyebrow { margin: 0; }
-  .work__all { font-size: .8125rem; color: var(--text-secondary); white-space: nowrap; }
+  .work__label {
+    font-size: .75rem;
+    font-weight: 500;
+    letter-spacing: .06em;
+    color: var(--text-muted);
+  }
+  .work__label::before { content: '// '; color: var(--gray-30); }
+  .work__all { font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
   .work__all:hover { color: var(--accent); }
 
   .work__list { list-style: none; margin: 0; padding: 0; }
@@ -174,7 +179,6 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     padding: var(--s-4) var(--s-3) var(--s-4) 0;
     color: inherit;
     border: 0;
-    /* Accent bar slides in from the left edge on hover. */
     background-image: linear-gradient(var(--accent), var(--accent));
     background-size: 0 100%;
     background-repeat: no-repeat;
@@ -189,14 +193,14 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     padding-left: var(--s-4);
   }
   .work__title {
-    font-size: 1rem;
+    font-size: .9375rem;
     font-weight: 600;
-    letter-spacing: -0.01em;
+    letter-spacing: -0.015em;
     transition: color .11s var(--ease);
   }
   .work__item:hover .work__title { color: var(--accent); }
   .work__desc {
-    font-size: .9rem;
+    font-size: .8125rem;
     color: var(--text-muted);
     min-width: 0;
     overflow: hidden;
@@ -204,14 +208,12 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     white-space: nowrap;
   }
   .work__year {
-    font-family: var(--font-mono);
     font-size: .75rem;
     color: var(--gray-50);
     white-space: nowrap;
   }
 
-  /* Below the fold for one line: stack title/description, keep the year inline. */
-  @media (max-width: 720px) {
+  @media (max-width: 780px) {
     .work__item {
       grid-template-columns: minmax(0, 1fr) max-content;
       gap: var(--s-1) var(--s-4);
@@ -223,7 +225,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
       grid-column: 1 / -1;
       white-space: normal;
       overflow: visible;
-      line-height: 1.5;
+      line-height: 1.6;
     }
   }
 </style>
