@@ -17,8 +17,10 @@ const projects = defineCollection({
   loader: glob({ base: './src/content/projects', pattern: '**/*.{md,mdx}' }),
   schema: z.object({
     title: z.string(),
-    /** One line shown on cards and at the top of the page. */
+    /** One line shown on cards and at the top of the project page. */
     summary: z.string(),
+    /** Terser one-liner for the home page list. Falls back to `summary`. */
+    tagline: z.string().optional(),
     /** Sort key + displayed period, e.g. "2024 — present". */
     period: z.string(),
     date: z.coerce.date(),

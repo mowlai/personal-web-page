@@ -3,261 +3,227 @@ import { getCollection } from 'astro:content';
 import Base from '../layouts/Base.astro';
 import Icon from '../components/Icon.astro';
 import Email from '../components/Email.astro';
-import ProjectCard from '../components/ProjectCard.astro';
 import { site, profiles } from '../data/site';
-import { publications } from '../data/publications';
 
 const featured = (await getCollection('projects', (p) => !p.data.draft && p.data.featured))
   .sort((a, b) => a.data.order - b.data.order || +b.data.date - +a.data.date)
   .slice(0, 3);
-
-const news = (await getCollection('news', (n) => !n.data.draft))
-  .sort((a, b) => +b.data.date - +a.data.date)
-  .slice(0, 4);
-
-const recentPubs = publications.slice(0, 3);
-
-const focus = [
-  {
-    heading: 'Reinforcement learning for control',
-    body: 'Deep RL policies that run real ultrafiltration plants, maximizing net water production under hard operating and safety constraints.',
-  },
-  {
-    heading: 'Foundation models for process data',
-    body: 'Pretraining and post-training time-series models on plant telemetry, then adapting them per-site for forecasting and control.',
-  },
-  {
-    heading: 'Agentic AI with guardrails',
-    body: 'Controllers that turn forecasts into setpoints, with constraint verification sitting between the model and the actuator.',
-  },
-];
 ---
 
 <Base>
-  <!-- Hero -->
-  <section class="hero">
-    <div class="wrap hero__inner">
-      <div class="hero__text">
-        <p class="eyebrow">{site.role}</p>
-        <h1>{site.name}</h1>
-        <p class="hero__affil">{site.affiliation}</p>
+  <div class="wrap home">
+    <!-- Identity -->
+    <section class="intro">
+      <img
+        class="intro__photo"
+        src="/images/ryan-mowlai.jpg"
+        alt={`Portrait of ${site.name}`}
+        width="360"
+        height="360"
+        fetchpriority="high"
+        decoding="async"
+      />
 
-        <p class="hero__pitch">
-          I build machine learning systems that <strong>run physical infrastructure</strong>.
-          My doctoral work, conducted with the U.S. Army Corps of Engineers, develops
-          reinforcement learning policies, time-series foundation models, and agentic
-          controllers for <strong>autonomous water treatment</strong>: turning raw plant
-          telemetry into forecasts, and forecasts into verified control setpoints.
-          Before Arizona I shipped RL-based building energy controllers to production in
-          Milan, and I have since worked on multimodal sensing at Lightsense and
-          LLM-driven audience modeling at IBM.
-        </p>
+      <div class="intro__text">
+        <h1 class="intro__name">{site.name}</h1>
+        <p class="intro__role">{site.role}</p>
+        <p class="intro__affil">{site.affiliation}</p>
+      </div>
+    </section>
 
-        <div class="hero__links">
-          {profiles.map((p) => (
-            <a class="btn" href={p.href} target="_blank" rel="noopener noreferrer">
-              <Icon name={p.icon} size={14} />{p.label}
-            </a>
+    <!-- Summary -->
+    <section class="summary">
+      <p>
+        I build machine learning systems that run physical infrastructure. My doctoral
+        work, with the U.S. Army Corps of Engineers, develops reinforcement learning
+        policies, time-series foundation models, and agentic controllers for autonomous
+        water treatment. Previously: RL building-energy control in Milan, multimodal
+        sensing at Lightsense, and LLM-driven audience modeling at IBM.
+      </p>
+
+      <nav class="links" aria-label="Profiles">
+        {profiles.map((p) => (
+          <a class="iconlink iconlink--lg" href={p.href} target="_blank" rel="noopener noreferrer">
+            <Icon name={p.icon} size={15} />{p.label}
+          </a>
+        ))}
+        <Email class="iconlink iconlink--lg"><Icon name="mail" size={15} />Email</Email>
+      </nav>
+    </section>
+
+    <!-- Selected work -->
+    {featured.length > 0 && (
+      <section class="work">
+        <div class="work__head">
+          <h2 class="eyebrow">Selected work</h2>
+          <a class="work__all" href="/projects">All projects &rarr;</a>
+        </div>
+
+        <ul class="work__list">
+          {featured.map((p) => (
+            <li>
+              <a class="work__item" href={`/projects/${p.id}/`}>
+                <span class="work__title">{p.data.title}</span>
+                <span class="work__desc">{p.data.tagline ?? p.data.summary}</span>
+                <span class="work__year">{p.data.period}</span>
+              </a>
+            </li>
           ))}
-          <Email variant="btn"><Icon name="mail" size={14} />Email</Email>
-        </div>
-      </div>
-
-      <figure class="hero__photo">
-        <img
-          src="/images/ryan-mowlai.jpg"
-          alt={`Portrait of ${site.name}`}
-          width="440"
-          height="523"
-          fetchpriority="high"
-          decoding="async"
-        />
-      </figure>
-    </div>
-  </section>
-
-  <!-- Research focus -->
-  <section class="section wrap">
-    <div class="section-head"><h2>Research focus</h2></div>
-    <div class="focus">
-      {focus.map((f) => (
-        <div class="focus__item">
-          <h3>{f.heading}</h3>
-          <p>{f.body}</p>
-        </div>
-      ))}
-    </div>
-  </section>
-
-  <!-- Selected projects -->
-  {featured.length > 0 && (
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>Selected projects</h2>
-        <a class="more link-arrow" href="/projects">All projects</a>
-      </div>
-      <div class="grid">
-        {featured.map((p) => (
-          <ProjectCard
-            href={`/projects/${p.id}/`}
-            title={p.data.title}
-            summary={p.data.summary}
-            period={p.data.period}
-            tags={p.data.tags}
-            cover={p.data.cover}
-            coverAlt={p.data.coverAlt}
-          />
-        ))}
-      </div>
-    </section>
-  )}
-
-  <!-- Recent publications -->
-  <section class="section wrap">
-    <div class="section-head">
-      <h2>Recent publications</h2>
-      <a class="more link-arrow" href="/publications">Full list</a>
-    </div>
-    <ol class="pubs">
-      {recentPubs.map((p) => (
-        <li class="pubs__item">
-          <span class="pubs__year meta">{p.year}</span>
-          <span class="pubs__body">
-            <a href={`/publications#${p.id}`}>{p.title}</a>
-            <span class="pubs__venue">{p.venueShort ?? p.venue}</span>
-          </span>
-        </li>
-      ))}
-    </ol>
-  </section>
-
-  <!-- News -->
-  {news.length > 0 && (
-    <section class="section wrap">
-      <div class="section-head">
-        <h2>News</h2>
-        <a class="more link-arrow" href="/news">All news</a>
-      </div>
-      <ul class="news">
-        {news.map((n) => (
-          <li class="news__item">
-            <time class="meta news__date" datetime={n.data.date.toISOString().slice(0, 10)}>
-              {n.data.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short' })}
-            </time>
-            <span class="news__text">
-              <a
-                href={n.data.href ?? `/news/${n.id}/`}
-                {...(n.data.href ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-              >{n.data.title}</a>
-              <span class="news__summary">{n.data.summary}</span>
-            </span>
-          </li>
-        ))}
-      </ul>
-    </section>
-  )}
+        </ul>
+      </section>
+    )}
+  </div>
 </Base>
 
 <style>
-  /* Hero */
-  .hero {
-    border-bottom: 1px solid var(--rule);
-    background: linear-gradient(180deg, var(--gray-10) 0%, var(--white) 100%);
+  .home {
+    max-width: 760px;
+    padding-block: var(--s-10) var(--s-9);
   }
-  .hero__inner {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 260px;
-    gap: var(--s-8);
-    align-items: start;
-    padding-block: var(--s-9) var(--s-8);
+  @media (max-width: 640px) {
+    .home { padding-block: var(--s-7) var(--s-8); }
   }
-  .hero h1 { margin-bottom: var(--s-2); }
-  .hero__affil {
-    font-size: .9375rem;
-    color: var(--text-secondary);
-    max-width: 46ch;
-    margin-bottom: var(--s-5);
-    padding-left: var(--s-3);
-    border-left: 2px solid var(--accent);
-  }
-  .hero__pitch {
-    font-size: 1.0625rem;
-    line-height: 1.65;
-    max-width: var(--measure);
-    color: var(--gray-90);
-  }
-  .hero__pitch strong { font-weight: 600; color: var(--text); }
-  .hero__links { display: flex; flex-wrap: wrap; gap: var(--s-2); margin-top: var(--s-5); }
 
-  .hero__photo { margin: 0; }
-  .hero__photo img {
-    width: 100%;
-    aspect-ratio: 4 / 5;
+  /* ---------- Identity ---------- */
+  .intro {
+    display: flex;
+    align-items: center;
+    gap: var(--s-6);
+    margin-bottom: var(--s-7);
+  }
+  .intro__photo {
+    width: 132px;
+    height: 132px;
+    flex: none;
     object-fit: cover;
     object-position: center 18%;
-    border: 1px solid var(--rule-strong);
+    border-radius: 50%;
+    /* Hairline ring plus a soft outer halo — the only ornament on the page. */
+    box-shadow:
+      0 0 0 1px var(--rule-strong),
+      0 0 0 8px var(--gray-10);
   }
-
-  @media (max-width: 800px) {
-    .hero__inner {
-      grid-template-columns: 1fr;
-      gap: var(--s-6);
-      padding-block: var(--s-7) var(--s-6);
-    }
-    .hero__photo { order: -1; max-width: 168px; }
+  .intro__name {
+    font-size: clamp(2rem, 1.5rem + 2.2vw, 2.75rem);
+    letter-spacing: -0.03em;
+    line-height: 1.05;
+    margin-bottom: var(--s-2);
   }
-
-  /* Focus */
-  .focus {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--s-5);
+  .intro__role {
+    font-family: var(--font-mono);
+    font-size: .78rem;
+    font-weight: 500;
+    letter-spacing: .1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0 0 var(--s-2);
   }
-  .focus__item { border-top: 2px solid var(--accent); padding-top: var(--s-3); }
-  .focus__item h3 { font-size: 1rem; margin-bottom: var(--s-2); }
-  .focus__item p { font-size: .9375rem; color: var(--text-secondary); margin: 0; }
-
-  /* Project grid */
-  .grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: var(--s-5);
+  .intro__affil {
+    font-size: .9375rem;
+    line-height: 1.5;
+    color: var(--text-secondary);
+    margin: 0;
+    max-width: 42ch;
   }
-
-  /* Compact publication list */
-  .pubs { list-style: none; margin: 0; padding: 0; }
-  .pubs__item {
-    display: grid;
-    grid-template-columns: 68px 1fr;
-    gap: var(--s-4);
-    padding-block: var(--s-3);
-    border-bottom: 1px solid var(--rule);
-  }
-  .pubs__item:last-child { border-bottom: 0; }
-  .pubs__year { padding-top: 2px; }
-  .pubs__body { display: flex; flex-direction: column; gap: .15rem; }
-  .pubs__body a { font-size: .9375rem; color: var(--text); border: 0; }
-  .pubs__body a:hover { color: var(--accent); border: 0; }
-  .pubs__venue { font-size: .8125rem; color: var(--text-muted); font-style: italic; }
-
-  /* News list */
-  .news { list-style: none; margin: 0; padding: 0; }
-  .news__item {
-    display: grid;
-    grid-template-columns: 100px 1fr;
-    gap: var(--s-4);
-    padding-block: var(--s-3);
-    border-bottom: 1px solid var(--rule);
-  }
-  .news__item:last-child { border-bottom: 0; }
-  .news__date { padding-top: 2px; }
-  .news__text { display: flex; flex-direction: column; gap: .15rem; }
-  .news__text > a { font-size: .9375rem; font-weight: 500; color: var(--text); border: 0; }
-  .news__text > a:hover { color: var(--accent); border: 0; }
-  .news__summary { font-size: .875rem; color: var(--text-secondary); }
 
   @media (max-width: 560px) {
-    .pubs__item,
-    .news__item { grid-template-columns: 1fr; gap: var(--s-1); }
+    .intro { flex-direction: column; align-items: flex-start; gap: var(--s-5); }
+    .intro__photo { width: 104px; height: 104px; }
+  }
+
+  /* ---------- Summary ---------- */
+  .summary p {
+    font-size: 1.125rem;
+    line-height: 1.7;
+    color: var(--gray-90);
+    margin: 0 0 var(--s-5);
+  }
+  @media (max-width: 560px) {
+    .summary p { font-size: 1.0625rem; }
+  }
+
+  .links {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--s-5);
+  }
+
+  /* ---------- Selected work ---------- */
+  .work { margin-top: var(--s-9); }
+  .work__head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--s-4);
+    padding-bottom: var(--s-3);
+    border-bottom: 1px solid var(--rule);
+  }
+  .work__head .eyebrow { margin: 0; }
+  .work__all { font-size: .8125rem; color: var(--text-secondary); white-space: nowrap; }
+  .work__all:hover { color: var(--accent); }
+
+  .work__list { list-style: none; margin: 0; padding: 0; }
+  .work__list li + li { border-top: 1px solid var(--gray-10); }
+
+  /* One row per project: title, one-line description, period. */
+  .work__item {
+    display: grid;
+    grid-template-columns: minmax(0, auto) minmax(0, 1fr) max-content;
+    align-items: baseline;
+    gap: var(--s-4);
+    padding: var(--s-4) var(--s-3) var(--s-4) 0;
+    color: inherit;
+    border: 0;
+    /* Accent bar slides in from the left edge on hover. */
+    background-image: linear-gradient(var(--accent), var(--accent));
+    background-size: 0 100%;
+    background-repeat: no-repeat;
+    background-position: left center;
+    transition: background-size .16s var(--ease), padding-left .16s var(--ease);
+  }
+  .work__item:hover,
+  .work__item:focus-visible {
+    color: inherit;
+    border: 0;
+    background-size: 2px 100%;
+    padding-left: var(--s-4);
+  }
+  .work__title {
+    font-size: 1rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    transition: color .11s var(--ease);
+  }
+  .work__item:hover .work__title { color: var(--accent); }
+  .work__desc {
+    font-size: .9rem;
+    color: var(--text-muted);
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .work__year {
+    font-family: var(--font-mono);
+    font-size: .75rem;
+    color: var(--gray-50);
+    white-space: nowrap;
+  }
+
+  /* Below the fold for one line: stack title/description, keep the year inline. */
+  @media (max-width: 720px) {
+    .work__item {
+      grid-template-columns: minmax(0, 1fr) max-content;
+      gap: var(--s-1) var(--s-4);
+      padding-block: var(--s-3);
+    }
+    .work__title { grid-column: 1; }
+    .work__year { grid-column: 2; grid-row: 1; }
+    .work__desc {
+      grid-column: 1 / -1;
+      white-space: normal;
+      overflow: visible;
+      line-height: 1.5;
+    }
   }
 </style>

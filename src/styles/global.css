@@ -213,6 +213,21 @@ main { flex: 1 0 auto; }
 .btn--primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: var(--white); }
 .btn svg { width: 14px; height: 14px; flex: none; }
 
+/* Icon + label link. Global rather than scoped: <Email> renders its own
+   anchor, so a parent component's scoped styles would never reach it. */
+.iconlink {
+  display: inline-flex;
+  align-items: center;
+  gap: .45rem;
+  color: var(--text-secondary);
+  border-bottom: 1px solid transparent;
+}
+.iconlink:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.iconlink svg { color: var(--gray-50); transition: color .11s var(--ease); }
+.iconlink:hover svg { color: var(--accent); }
+.iconlink--lg { font-size: .9rem; }
+.iconlink--sm { font-size: .8125rem; }
+
 .link-arrow { font-size: .875rem; font-weight: 500; }
 .link-arrow::after { content: ' \2192'; }
 

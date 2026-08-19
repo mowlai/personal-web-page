@@ -10,12 +10,12 @@ const year = new Date().getFullYear();
     <ul class="links">
       {profiles.map((p) => (
         <li>
-          <a href={p.href} target="_blank" rel="noopener noreferrer">
+          <a class="iconlink iconlink--sm" href={p.href} target="_blank" rel="noopener noreferrer">
             <Icon name={p.icon} size={14} /> {p.label}
           </a>
         </li>
       ))}
-      <li><Email><Icon name="mail" size={14} /> Email</Email></li>
+      <li><Email class="iconlink iconlink--sm"><Icon name="mail" size={14} /> Email</Email></li>
     </ul>
   </div>
 </footer>
@@ -37,9 +37,4 @@ const year = new Date().getFullYear();
   }
   .copy { margin: 0; }
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); list-style: none; margin: 0; padding: 0; }
-  .links a {
-    display: inline-flex; align-items: center; gap: .4rem;
-    font-size: .8125rem; color: var(--text-secondary); border: 0;
-  }
-  .links a:hover { color: var(--accent); border: 0; }
 </style>

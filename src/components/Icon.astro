@@ -1,7 +1,7 @@
 ---
 /** Inline SVG icons. 16px grid, currentColor, no external requests. */
 interface Props { name: string; size?: number; class?: string }
-const { name, size = 16, class: cls = '' } = Astro.props;
+const { name, size = 16, class: cls } = Astro.props;
 
 const paths: Record<string, string> = {
   github:
@@ -31,7 +31,7 @@ const paths: Record<string, string> = {
 const body = paths[name] ?? '';
 ---
 <svg
-  class={cls}
+  class={cls || undefined}
   width={size}
   height={size}
   viewBox="0 0 16 16"

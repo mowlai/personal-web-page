@@ -1,6 +1,7 @@
 ---
 title: LLM Audience Builder
 summary: A natural-language interface over validated propensity models, letting non-technical users define and segment audiences by describing them.
+tagline: Natural-language audience segmentation over validated propensity models.
 period: "2026"
 date: 2026-05-01
 cover: /images/projects/llm-audience-builder.svg

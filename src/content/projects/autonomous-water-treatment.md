@@ -1,6 +1,7 @@
 ---
 title: Autonomous Water Treatment
 summary: A reinforcement learning and agentic AI framework that runs ultrafiltration plants end to end, from raw telemetry to verified control setpoints.
+tagline: Reinforcement learning and agentic control for ultrafiltration plants.
 period: 2023 — present
 date: 2023-08-01
 cover: /images/projects/autonomous-water-treatment.svg
