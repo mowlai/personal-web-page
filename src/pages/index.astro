@@ -36,34 +36,18 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
       <p>
         I am a PhD candidate in Systems and Industrial Engineering with a minor in
         Computer Science at the University of Arizona, where I work as a research
-        assistant in Cyber-Physical Manufacturing Systems. My doctoral research
-        brings together state-aware optimization, reinforcement learning, and agentic
-        AI for autonomous water treatment as part of the
-        <a href="https://www.wateresiliency.org/research-thrusts" target="_blank" rel="noopener noreferrer">WateResiliency project funded by the U.S. Army Corps of Engineers</a>.
+        assistant in Cyber-Physical Manufacturing Systems. As part of the
+        <a href="https://www.wateresiliency.org/research-thrusts" target="_blank" rel="noopener noreferrer">WateResiliency project funded by the U.S. Army Corps of Engineers</a>,
+        my doctoral research combines predictive modeling, state-aware optimization,
+        reinforcement learning, and agentic AI for autonomous water treatment. I study
+        how operational history, membrane condition, and water quality can guide
+        operating decisions, and how adaptive control policies can balance long-term
+        water production with fouling, energy and chemical use, downtime, and physical
+        constraints. I also investigate how tool-augmented language agents can bring
+        together these models and policies with operational knowledge and safety
+        verification to support reliable, explainable decisions in dynamic
+        cyber-physical systems.
       </p>
-
-      <section class="research-questions" aria-labelledby="research-questions-title">
-        <h2 id="research-questions-title">Core Dissertation Research Questions</h2>
-        <h3>RQ1 — State-Aware Optimization</h3>
-        <p>
-          How can heterogeneous operational history, membrane condition, water quality,
-          and controllable operating variables be transformed into predictive response
-          models and state-dependent optimal operating decisions?
-        </p>
-        <h3>RQ2 — Reinforcement Learning and Adaptive Control</h3>
-        <p>
-          How can autonomous water treatment systems learn long-horizon operating and
-          cleaning policies that balance water production, fouling, energy, chemical
-          usage, downtime, and physical constraints?
-        </p>
-        <h3>RQ3 — Agentic AI for Cyber-Physical Systems</h3>
-        <p>
-          How can tool-augmented language agents integrate predictive models,
-          optimization, reinforcement-learning policies, operational knowledge, and
-          safety verification to provide reliable and explainable decision support
-          for dynamic cyber-physical systems?
-        </p>
-      </section>
 
       <p>
         I earned my master's in Data Science at Sapienza University of Rome, focusing
@@ -187,19 +171,6 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   }
 
   .summary p:last-of-type { margin-bottom: var(--s-5); }
-
-  .research-questions { margin-block: var(--s-6); }
-  .research-questions h2 {
-    font-size: 1rem;
-    margin-bottom: var(--s-4);
-    padding-left: var(--s-4);
-  }
-  .research-questions h3 {
-    font-size: .9375rem;
-    line-height: 1.6;
-    margin-bottom: var(--s-2);
-    padding-left: var(--s-4);
-  }
 
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
 
