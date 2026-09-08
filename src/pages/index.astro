@@ -34,23 +34,52 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     <!-- Summary -->
     <section class="summary" data-stream>
       <p>
-        I am a PhD candidate in Systems and Industrial Engineering at the University of
-        Arizona, expected to graduate in May 2027. My dissertation develops reinforcement
-        learning and agentic AI methods for autonomous operation of ultrafiltration water
-        treatment systems, work funded by the U.S. Army Corps of Engineers. The models run
-        on real plant data and real hardware, which shapes how I think about evaluation:
-        a policy is only interesting if it holds up on the machine, not just on a benchmark.
+        I am a PhD candidate in Systems and Industrial Engineering with a minor in
+        Computer Science at the University of Arizona, where I work as a research
+        assistant in Cyber-Physical Manufacturing Systems. My doctoral research
+        brings together state-aware optimization, reinforcement learning, and agentic
+        AI for autonomous water treatment as part of the
+        <a href="https://www.wateresiliency.org/research-thrusts" target="_blank" rel="noopener noreferrer">WateResiliency project funded by the U.S. Army Corps of Engineers</a>.
+      </p>
+
+      <section class="research-questions" aria-labelledby="research-questions-title">
+        <h2 id="research-questions-title">Core Dissertation Research Questions</h2>
+        <h3>RQ1 — State-Aware Optimization</h3>
+        <p>
+          How can heterogeneous operational history, membrane condition, water quality,
+          and controllable operating variables be transformed into predictive response
+          models and state-dependent optimal operating decisions?
+        </p>
+        <h3>RQ2 — Reinforcement Learning and Adaptive Control</h3>
+        <p>
+          How can autonomous water treatment systems learn long-horizon operating and
+          cleaning policies that balance water production, fouling, energy, chemical
+          usage, downtime, and physical constraints?
+        </p>
+        <h3>RQ3 — Agentic AI for Cyber-Physical Systems</h3>
+        <p>
+          How can tool-augmented language agents integrate predictive models,
+          optimization, reinforcement-learning policies, operational knowledge, and
+          safety verification to provide reliable and explainable decision support
+          for dynamic cyber-physical systems?
+        </p>
+      </section>
+
+      <p>
+        I earned my master's in Data Science at Sapienza University of Rome, focusing
+        on computer vision. My research adapted transformer-based Multi-Style Networks
+        to predict human poses, with the goal of preventing human–robot collisions in
+        human–robot collaboration systems. This work led to a publication at IEEE SIEDS.
+        I also have extensive experience in vision-language modeling, including work
+        during a Google training camp at Sapienza, alongside a broader portfolio of
+        data science and machine learning projects.
       </p>
       <p>
-        My path into this started with prediction. At Sapienza I worked on transformer-based
-        human pose forecasting for human robot collaboration. The PhD moved me from
-        predicting what a system will do to deciding what it should do next.
-      </p>
-      <p>
-        Alongside the PhD I have worked at IBM on large-scale propensity modeling and LLM
-        applications, at Lightsense Technology on multimodal deep learning and adversarial
-        evaluation, and at DIDO Srl in Milan on PPO-based building energy optimization
-        deployed on AWS. I have published at IEEE SIEDS, with additional work in progress.
+        My internships and industry experience span statistical modeling, deep
+        learning, and deployed AI systems. At IBM, I worked on large-scale propensity
+        modeling and LLM applications. At Lightsense Technology, I worked on multimodal
+        deep learning and adversarial evaluation. At DIDO Srl in Milan, I worked on
+        PPO-based building energy optimization deployed on AWS.
       </p>
 
       <nav class="links" aria-label="Profiles">
@@ -158,6 +187,19 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   }
 
   .summary p:last-of-type { margin-bottom: var(--s-5); }
+
+  .research-questions { margin-block: var(--s-6); }
+  .research-questions h2 {
+    font-size: 1rem;
+    margin-bottom: var(--s-4);
+    padding-left: var(--s-4);
+  }
+  .research-questions h3 {
+    font-size: .9375rem;
+    line-height: 1.6;
+    margin-bottom: var(--s-2);
+    padding-left: var(--s-4);
+  }
 
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
 
