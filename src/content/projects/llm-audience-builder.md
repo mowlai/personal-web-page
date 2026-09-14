@@ -1,7 +1,8 @@
 ---
-title: LLM Audience Builder
-summary: A natural-language interface over validated propensity models, letting non-technical users define and segment audiences by describing them.
-tagline: Natural-language audience segmentation over validated propensity models.
+title: Large-Scale Behavioral Modeling & LLM Decision Tools
+context: IBM · Machine Learning & Data Science
+summary: Built propensity models on more than 65M behavioral records, supported by statistical testing, feature ablation, and model benchmarking. Integrated predictions into an LLM-powered application for natural-language audience definition and model-driven decision support.
+tagline: Large-scale propensity modeling integrated with LLM-powered decision tools.
 period: "2026"
 date: 2026-05-01
 cover: /images/projects/llm-audience-builder.svg

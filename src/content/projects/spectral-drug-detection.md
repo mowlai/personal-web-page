@@ -1,7 +1,8 @@
 ---
-title: Multimodal Spectral Drug Detection
-summary: Deep learning models over spectral scans for a portable field detection device, hardened against sensor noise and distribution shift.
-tagline: Field-hardened multimodal deep learning for a portable detection device.
+title: Multimodal Learning for Spectral Drug Detection
+context: Lightsense Technology · Machine Learning Research
+summary: Developed and benchmarked multimodal deep learning models for drug detection from spectral sensor data. Evaluated robustness under noise and distribution shift and used predictive modeling to improve sensing configurations and detection sensitivity.
+tagline: Robust multimodal learning for drug detection from spectral sensor data.
 period: "2025"
 date: 2025-05-01
 cover: /images/projects/spectral-drug-detection.svg

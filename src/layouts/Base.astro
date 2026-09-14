@@ -16,7 +16,7 @@ interface Props {
 const {
   title,
   description = site.description,
-  image = '/images/ryan-mowlai.jpg',
+  image = '/images/profile_picture_ryan.png',
   type = 'website',
   footer = true,
 } = Astro.props;
@@ -49,7 +49,7 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
 
     <meta name="theme-color" content="#ffffff" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <link rel="apple-touch-icon" href="/images/ryan-mowlai.jpg" />
+    <link rel="apple-touch-icon" href="/images/profile_picture_ryan.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
 
@@ -78,7 +78,7 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
       name: site.name,
       jobTitle: site.role,
       url: site.url,
-      image: `${site.url}/images/ryan-mowlai.jpg`,
+      image: `${site.url}/images/profile_picture_ryan.png`,
       affiliation: { '@type': 'CollegeOrUniversity', name: 'University of Arizona' },
       sameAs: ['https://github.com/mowlai', 'https://linkedin.com/in/ryanmrm'],
     })} />

@@ -1,7 +1,8 @@
 ---
-title: Autonomous Water Treatment
-summary: A reinforcement learning and agentic AI framework that runs ultrafiltration plants end to end, from raw telemetry to verified control setpoints.
-tagline: Reinforcement learning and agentic control for ultrafiltration plants.
+title: Autonomous Decision-Making with ML & RL
+context: Ph.D. Research · University of Arizona
+summary: Developing machine learning, reinforcement learning, and optimization methods for autonomous cyber-physical systems. The work combines time-series modeling, system-state prediction, sequential control, and agentic AI to optimize real-world operations under uncertainty.
+tagline: Machine learning, reinforcement learning, and optimization for autonomous cyber-physical systems.
 period: 2023 — present
 date: 2023-08-01
 cover: /images/projects/autonomous-water-treatment.svg

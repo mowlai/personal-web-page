@@ -7,7 +7,7 @@ import { site, profiles } from '../data/site';
 
 const featured = (await getCollection('projects', (p) => !p.data.draft && p.data.featured))
   .sort((a, b) => a.data.order - b.data.order || +b.data.date - +a.data.date)
-  .slice(0, 3);
+  .slice(0, 5);
 ---
 
 <Base footer={false}>
@@ -16,7 +16,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     <section class="intro" data-stream>
       <img
         class="intro__photo"
-        src="/images/ryan-mowlai.jpg"
+        src="/images/profile_picture_ryan.png"
         alt={`Portrait of ${site.name}`}
         width="360"
         height="360"
@@ -27,39 +27,42 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
       <div>
         <h1 class="intro__name">{site.name}<span class="stream-caret" aria-hidden="true"></span></h1>
         <p class="intro__role">{site.role}</p>
-        <p class="intro__affil">{site.affiliation}</p>
+        <div class="intro__education">
+          <p class="intro__degree">
+            PhD, <a href="https://sie.engineering.arizona.edu/" target="_blank" rel="noopener noreferrer">Systems and Industrial Engineering</a> at University of Arizona
+          </p>
+          <p class="intro__subline">
+            Minor in <a href="https://cs.arizona.edu/" target="_blank" rel="noopener noreferrer">Computer Science</a>
+          </p>
+          <p class="intro__degree intro__degree--second">
+            MSc, <a href="https://corsidilaurea.uniroma1.it/en/course/33519" target="_blank" rel="noopener noreferrer">Data Science</a>,
+            Sapienza University of Rome
+          </p>
+          <p class="intro__subline">
+            Research at <a href="https://www.pinlab.org/" target="_blank" rel="noopener noreferrer">Perception and Intelligence Lab</a>
+          </p>
+        </div>
       </div>
     </section>
 
     <!-- Summary -->
     <section class="summary" data-stream>
       <p>
-        I am a PhD candidate in Systems and Industrial Engineering with a minor in
-        Computer Science at the University of Arizona, where I work as a research
-        assistant in Cyber-Physical Manufacturing Systems. As part of the 
-        <a href="https://www.wateresiliency.org/research-thrusts" target="_blank" rel="noopener noreferrer"> WateResiliency project funded by the U.S. Army Corps of Engineers</a>,
-        my doctoral research combines predictive modeling, state-aware optimization,
-        reinforcement learning, and agentic AI for autonomous water treatment. I also investigate how tool-augmented language agents can bring
-        together these models and policies with operational knowledge and safety
-        verification to support reliable, explainable decisions in dynamic
-        cyber-physical systems.
+        I am a machine learning researcher working across <strong>statistical learning,
+        reinforcement learning, optimization, deep learning, and agentic AI</strong>.
       </p>
 
       <p>
-        I earned my master's in Data Science at Sapienza University of Rome, focusing
-        on computer vision. My research adapted transformer-based Multi-Style Networks
-        to predict human poses, with the goal of preventing human–robot collisions in
-        human–robot collaboration systems. This work led to a publication at IEEE SIEDS.
-        I also have extensive experience in vision-language modeling, including work
-        during a Google training camp at Sapienza, alongside a broader portfolio of
-        data science and machine learning projects.
+        My research focuses on developing intelligent systems that can <strong>learn
+        from complex data, predict future behavior, and make optimized decisions under
+        uncertainty</strong>. In my Ph.D., I develop machine learning, reinforcement
+        learning, and agentic AI methods for autonomous cyber-physical systems, with
+        applications in real-world control and optimization.
       </p>
       <p>
-        My internships and industry experience span statistical modeling, deep
-        learning, and deployed AI systems. At IBM, I worked on large-scale propensity
-        modeling and LLM applications. At Lightsense Technology, I worked on multimodal
-        deep learning and adversarial evaluation. At DIDO Srl in Milan, I worked on
-        PPO-based building energy optimization deployed on AWS.
+        My broader work spans large-scale predictive modeling, multimodal learning,
+        sequential decision-making, anomaly detection, and production ML systems
+        across research and industry.
       </p>
 
       <nav class="links" aria-label="Profiles">
@@ -76,21 +79,21 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     {featured.length > 0 && (
       <section class="work">
         <div class="work__head">
-          <h2 class="work__label">selected work</h2>
+          <h2 class="work__label">Selected Work</h2>
           <a class="work__all" href="/projects">/projects &rarr;</a>
         </div>
 
-        <ul class="work__list">
+        <div class="work__list">
           {featured.map((p) => (
-            <li>
-              <a class="work__item" href={`/projects/${p.id}/`}>
-                <span class="work__title">{p.data.title}</span>
-                <span class="work__desc">{p.data.tagline ?? p.data.summary}</span>
-                <span class="work__year">{p.data.period}</span>
+            <article class="work__item">
+              <a class="work__link" href={`/projects/${p.id}/`}>
+                <h3 class="work__title">{p.data.title}</h3>
+                <p class="work__summary">{p.data.summary}</p>
+                <span class="work__period">{p.data.period}</span>
               </a>
-            </li>
+            </article>
           ))}
-        </ul>
+        </div>
       </section>
     )}
   </div>
@@ -98,7 +101,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 
 <style>
   .home {
-    max-width: 780px;
+    max-width: var(--page);
     padding-block: var(--s-9) var(--s-9);
   }
   @media (max-width: 640px) {
@@ -141,12 +144,26 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   /* Renders as: > machine learning research scientist */
   .intro__role::before { content: '> '; color: var(--gray-30); }
 
-  .intro__affil {
+  .intro__education {
     font-size: .8125rem;
     line-height: 1.6;
     color: var(--text-muted);
-    margin: 0;
-    max-width: 46ch;
+    max-width: 76ch;
+  }
+  .intro__education p { margin: 0; }
+  .intro__subline {
+    padding-left: var(--s-4);
+    color: var(--gray-50);
+  }
+  .intro__subline::before { content: '\21B3  '; color: var(--gray-30); }
+  .intro__degree--second { margin-top: var(--s-1) !important; }
+  .intro__education a {
+    color: var(--text-secondary);
+    border-bottom-color: var(--rule-strong);
+  }
+  .intro__education a:hover {
+    color: var(--accent);
+    border-bottom-color: currentColor;
   }
 
   @media (max-width: 560px) {
@@ -155,6 +172,9 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   }
 
   /* ---------- Summary ---------- */
+  .summary {
+    max-width: 780px;
+  }
   .summary p {
     font-size: .9375rem;
     line-height: 1.85;
@@ -185,70 +205,62 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     font-weight: 500;
     letter-spacing: .06em;
     color: var(--text-muted);
+    text-transform: lowercase;
   }
   .work__label::before { content: '// '; color: var(--gray-30); }
   .work__all { font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
   .work__all:hover { color: var(--accent); }
 
-  .work__list { list-style: none; margin: 0; padding: 0; }
-  .work__list li + li { border-top: 1px solid var(--gray-10); }
-
-  /* One row per project: title, one-line description, period. */
-  .work__item {
+  .work__list { border-bottom: 1px solid var(--rule); }
+  .work__item { border-bottom: 1px solid var(--rule); }
+  .work__item:last-child { border-bottom: 0; }
+  .work__link {
     display: grid;
-    grid-template-columns: minmax(0, auto) minmax(0, 1fr) max-content;
+    grid-template-columns: minmax(230px, 1fr) minmax(160px, 1.8fr) max-content;
     align-items: baseline;
     gap: var(--s-4);
-    padding: var(--s-4) var(--s-3) var(--s-4) 0;
+    min-width: 0;
+    padding-block: var(--s-4);
     color: inherit;
     border: 0;
-    background-image: linear-gradient(var(--accent), var(--accent));
-    background-size: 0 100%;
-    background-repeat: no-repeat;
-    background-position: left center;
-    transition: background-size .16s var(--ease), padding-left .16s var(--ease);
   }
-  .work__item:hover,
-  .work__item:focus-visible {
-    color: inherit;
-    border: 0;
-    background-size: 2px 100%;
-    padding-left: var(--s-4);
-  }
+  .work__link:hover { color: inherit; border: 0; }
   .work__title {
-    font-size: .9375rem;
-    font-weight: 600;
-    letter-spacing: -0.015em;
+    overflow: hidden;
+    font-size: .875rem;
+    line-height: 1.45;
+    text-overflow: ellipsis;
+    white-space: nowrap;
     transition: color .11s var(--ease);
   }
-  .work__item:hover .work__title { color: var(--accent); }
-  .work__desc {
-    font-size: .8125rem;
-    color: var(--text-muted);
+  .work__link:hover .work__title { color: var(--accent); }
+  .work__summary {
     min-width: 0;
     overflow: hidden;
+    margin: 0;
+    color: var(--text-muted);
+    font-size: .75rem;
+    line-height: 1.45;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
-  .work__year {
-    font-size: .75rem;
-    color: var(--gray-50);
+  .work__period {
+    color: var(--text-muted);
+    font-size: .6875rem;
     white-space: nowrap;
   }
 
-  @media (max-width: 780px) {
-    .work__item {
+  @media (max-width: 720px) {
+    .work__link {
       grid-template-columns: minmax(0, 1fr) max-content;
-      gap: var(--s-1) var(--s-4);
-      padding-block: var(--s-3);
+      gap: var(--s-1) var(--s-3);
     }
-    .work__title { grid-column: 1; }
-    .work__year { grid-column: 2; grid-row: 1; }
-    .work__desc {
+    .work__summary {
       grid-column: 1 / -1;
       white-space: normal;
-      overflow: visible;
-      line-height: 1.6;
+      display: -webkit-box;
+      -webkit-box-orient: vertical;
+      -webkit-line-clamp: 2;
     }
   }
 </style>

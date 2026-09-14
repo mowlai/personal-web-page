@@ -21,6 +21,8 @@ const projects = defineCollection({
     summary: z.string(),
     /** Terser one-liner for the home page list. Falls back to `summary`. */
     tagline: z.string().optional(),
+    /** Organization or research context displayed directly below the title. */
+    context: z.string().optional(),
     /** Sort key + displayed period, e.g. "2024 — present". */
     period: z.string(),
     date: z.coerce.date(),
