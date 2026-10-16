@@ -211,6 +211,8 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   /* Inside terminal panels the panels provide the spacing. */
   :global([data-theme]) .intro { margin-bottom: 0; }
   :global([data-theme]) .summary { max-width: none; }
+  /* The narrowed page column is the measure; text runs to the panel edge. */
+  :global([data-theme]) .summary p { max-width: none; }
   :global([data-theme]) .work { margin-top: 0; }
 
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
