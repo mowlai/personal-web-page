@@ -21,7 +21,7 @@ const {
   footer = true,
 } = Astro.props;
 
-const pageTitle = title ? `${title} — ${site.name}` : `${site.name} — ${site.role}`;
+const pageTitle = title ? `${title} — ${site.name}` : site.name;
 const canonical = new URL(Astro.url.pathname, Astro.site ?? site.url).href;
 const ogImage = new URL(image, Astro.site ?? site.url).href;
 ---
@@ -48,7 +48,7 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
     <meta name="twitter:image" content={ogImage} />
 
     <meta name="theme-color" content="#ffffff" />
-    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="apple-touch-icon" href="/images/profile_picture_ryan.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     <link rel="alternate" type="application/rss+xml" title={`${site.name} — Blog`} href="/rss.xml" />
@@ -59,6 +59,18 @@ const ogImage = new URL(image, Astro.site ?? site.url).href;
       rel="stylesheet"
       href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&display=swap"
     />
+
+    <script is:inline>
+      /* Applies the chosen editor theme before first paint so the page never
+         flashes the wrong palette. Defaults to vscode. */
+      try {
+        var q = new URLSearchParams(location.search).get('theme');
+        if (q === 'light' || q === 'vscode' || q === 'pycharm') localStorage.setItem('theme', q);
+        var t = localStorage.getItem('theme');
+        if (t !== 'light' && t !== 'pycharm') t = 'vscode';
+        document.documentElement.setAttribute('data-theme', t);
+      } catch (e) { document.documentElement.setAttribute('data-theme', 'vscode'); }
+    </script>
 
     <script is:inline>
       /* Runs before first paint: marks the document so [data-stream] blocks are

@@ -26,12 +26,14 @@ const count = publications.length;
       where one is available, and a one-click BibTeX citation.
     </PageHeader>
 
+    <div class="term" data-title="~/publications — cat refs.bib">
     {years.map((y) => (
       <div class="year-block">
         <h2 class="year-heading">{y}</h2>
         {byYear.get(y)!.map((pub) => <PublicationEntry pub={pub} />)}
       </div>
     ))}
+    </div>
   </div>
 </Base>
 

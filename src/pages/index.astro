@@ -13,6 +13,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 <Base footer={false}>
   <div class="wrap home">
     <!-- Identity -->
+    <div class="term term--plain" data-title="~ — whoami">
     <section class="intro" data-stream>
       <img
         class="intro__photo"
@@ -48,11 +49,12 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
         </div>
       </div>
     </section>
+    </div>
 
     <!-- Summary -->
-    <section class="summary" data-stream>
-      <p>
-       Advancing AI for intelligent, adaptive, and autonomous physical systems.
+    <section class="summary term" data-title="~ — cat about.md" data-stream>
+      <p class="summary__lead">
+        Advancing AI for intelligent, adaptive, and autonomous physical systems.
       </p>
       <p>
         PhD researcher in machine learning at the University of Arizona, with over two
@@ -90,7 +92,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
 
     <!-- Selected work -->
     {featured.length > 0 && (
-      <section class="work">
+      <section class="work term" data-title="~/projects — ls">
         <div class="work__head">
           <h2 class="work__label">Selected Work</h2>
           <a class="work__all" href="/projects">/projects &rarr;</a>
@@ -155,7 +157,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     margin: 0 0 var(--s-2);
   }
   /* Renders as: > machine learning research scientist */
-  .intro__role::before { content: '> '; color: var(--gray-30); }
+  .intro__role::before { content: '> '; color: var(--comment); }
 
   .intro__education {
     font-size: .8125rem;
@@ -204,6 +206,12 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
   }
 
   .summary p:last-of-type { margin-bottom: var(--s-5); }
+  .summary .summary__lead { font-weight: 600; color: var(--text-strong); }
+
+  /* Inside terminal panels the panels provide the spacing. */
+  :global([data-theme]) .intro { margin-bottom: 0; }
+  :global([data-theme]) .summary { max-width: none; }
+  :global([data-theme]) .work { margin-top: 0; }
 
   .links { display: flex; flex-wrap: wrap; gap: var(--s-5); padding-left: var(--s-4); }
 
@@ -224,7 +232,7 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     color: var(--text-muted);
     text-transform: lowercase;
   }
-  .work__label::before { content: '// '; color: var(--gray-30); }
+  .work__label::before { content: '// '; color: var(--comment); }
   .work__all { font-size: .75rem; color: var(--text-muted); white-space: nowrap; }
   .work__all:hover { color: var(--accent); }
 

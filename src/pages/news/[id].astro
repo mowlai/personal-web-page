@@ -17,7 +17,7 @@ const fmt = (dt: Date) =>
 
 <Base title={d.title} description={d.summary} image={d.cover} type="article">
   <article class="wrap page">
-    <header class="page-head" data-stream>
+    <header class="page-head term" data-title={`~/news/${item.id}`} data-stream>
       <a class="back" href="/news">&larr; news</a>
       <time class="meta" datetime={d.date.toISOString().slice(0, 10)}>{fmt(d.date)}</time>
       <h1>{d.title}</h1>
@@ -31,7 +31,7 @@ const fmt = (dt: Date) =>
       </figure>
     )}
 
-    <div class="prose">
+    <div class="prose term" data-title="post.md">
       <Content />
     </div>
   </article>

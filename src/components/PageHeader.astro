@@ -14,7 +14,7 @@ interface Props {
 const { label, title, meta } = Astro.props;
 ---
 
-<header class="page-head" data-stream>
+<header class="page-head term" data-title={`~/${label}`} data-stream>
   <p class="eyebrow">{label}</p>
   <h1>{title}</h1>
   <p class="lede"><slot /></p>
@@ -27,5 +27,5 @@ const { label, title, meta } = Astro.props;
     color: var(--gray-50);
     margin: var(--s-3) 0 0;
   }
-  .count::before { content: '$ '; color: var(--gray-30); }
+  .count::before { content: '$ '; color: var(--comment); }
 </style>

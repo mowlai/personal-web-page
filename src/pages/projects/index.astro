@@ -20,6 +20,7 @@ const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
       the work is public.
     </PageHeader>
 
+    <div class="term" data-title="~/projects — ls -l">
     {projects.length === 0 ? (
       <p class="empty">No projects published yet.</p>
     ) : (
@@ -38,6 +39,7 @@ const projects = (await getCollection('projects', (p) => !p.data.draft)).sort(
         ))}
       </div>
     )}
+    </div>
   </div>
 </Base>
 

@@ -17,6 +17,7 @@ const fmt = (d: Date) =>
       Awards, talks, papers, and milestones, newest first.
     </PageHeader>
 
+    <div class="term" data-title="~/news — tail -f">
     {items.length === 0 ? (
       <p class="empty">Nothing posted yet.</p>
     ) : (
@@ -49,6 +50,7 @@ const fmt = (d: Date) =>
         })}
       </ul>
     )}
+    </div>
   </div>
 </Base>
 

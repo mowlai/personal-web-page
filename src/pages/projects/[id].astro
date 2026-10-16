@@ -15,7 +15,7 @@ const d = project.data;
 
 <Base title={d.title} description={d.summary} image={d.cover} type="article">
   <article class="wrap page">
-    <header class="page-head" data-stream>
+    <header class="page-head term" data-title={`~/projects/${project.id}`} data-stream>
       <a class="back" href="/projects">&larr; projects</a>
       <p class="eyebrow">{d.period}</p>
       <h1>{d.title}</h1>
@@ -45,7 +45,7 @@ const d = project.data;
       </figure>
     )}
 
-    <div class="prose"><Content /></div>
+    <div class="prose term" data-title="README.md"><Content /></div>
   </article>
 </Base>
 

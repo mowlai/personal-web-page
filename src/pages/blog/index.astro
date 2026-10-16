@@ -21,6 +21,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
       real industrial processes.
     </PageHeader>
 
+    <div class="term" data-title="~/blog — ls">
     {posts.length === 0 ? (
       <p class="empty">First posts are in the works.</p>
     ) : (
@@ -37,6 +38,7 @@ const posts = (await getCollection('blog', (p) => !p.data.draft)).sort(
         ))}
       </div>
     )}
+    </div>
 
     <p class="rss meta">
       <a href="/rss.xml">RSS feed</a>

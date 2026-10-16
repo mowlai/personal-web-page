@@ -32,6 +32,11 @@
   --accent:        var(--blue-60);
   --accent-hover:  var(--blue-70);
   --accent-wash:   #edf3ff;
+  /* Shell-comment markers: the // and $ and > prefixes. */
+  --comment:       var(--gray-30);
+  --header-bg:     rgba(255, 255, 255, .93);
+  /* Brightest text, for the one line that should stand out. */
+  --text-strong:   var(--gray-100);
 
   /* Monospace is the interface font, not just the code font. IBM Plex Sans is
      kept only for the rare element that must not be mono. */
@@ -93,7 +98,7 @@ h4 { font-size: .9375rem; }
 .prose h2::before,
 .prose h3::before {
   content: '// ';
-  color: var(--gray-30);
+  color: var(--comment);
   font-weight: 400;
 }
 p  { margin: 0 0 var(--s-4); }
@@ -166,7 +171,7 @@ main { flex: 1 0 auto; }
   color: var(--text-muted);
   margin: 0 0 var(--s-3);
 }
-.eyebrow::before { content: '// '; color: var(--gray-30); }
+.eyebrow::before { content: '// '; color: var(--comment); }
 
 .section-head {
   display: flex;
@@ -335,3 +340,121 @@ main { flex: 1 0 auto; }
   transition: top .11s var(--ease);
 }
 .skip-link:focus { top: var(--s-4); color: var(--white); border-bottom: 0; }
+
+/* ============================================================
+   Editor themes (design experiment)
+   <html data-theme="light | vscode | pycharm">.
+   Each theme redefines the gray and blue ramps themselves, so every
+   component reading a ramp token follows without its own override.
+   ============================================================ */
+
+/* VS Code Light Modern: soft grey ground, white panels, blue accent,
+   green comments. */
+[data-theme='light'] {
+  color-scheme: light;
+  --white:    #f3f3f3;
+  --gray-10:  #f3f3f3;
+  --gray-20:  #e5e5e5;
+  --gray-30:  #c8c8c8;
+  --blue-20:  #c7ddf2;
+  --blue-60:  #005fb8;
+  --blue-70:  #0258a8;
+  --blue-80:  #004b91;
+  --accent-wash: #e8f1fb;
+  --comment:  #008000;
+  --header-bg: rgba(248, 248, 248, .93);
+  --panel:        #ffffff;
+  --panel-bar:    #f8f8f8;
+  --panel-border: #e5e5e5;
+  --panel-shadow: 0 1px 3px rgba(0, 0, 0, .05), 0 8px 24px rgba(0, 0, 0, .06);
+}
+
+/* VS Code Dark Modern: near-black ground, blue accent, green comments. */
+[data-theme='vscode'] {
+  color-scheme: dark;
+  --white:    #111111;
+  --gray-10:  #252526;
+  --gray-20:  #2b2b2b;
+  --gray-30:  #474747;
+  --gray-50:  #858585;
+  --gray-60:  #9d9d9d;
+  --gray-70:  #b8b8b8;
+  --gray-90:  #cccccc;
+  --gray-100: #e8e8e8;
+  --blue-20:  #264f78;
+  --blue-60:  #4daafc;
+  --blue-70:  #7cc0ff;
+  --blue-80:  #9cdcfe;
+  --accent-wash: #0b2a44;
+  --comment:  #6a9955;
+  --text-strong: #ffffff;
+  --header-bg: rgba(24, 24, 24, .92);
+  --panel:        #1e1e1e;
+  --panel-bar:    #181818;
+  --panel-border: #2b2b2b;
+}
+
+/* PyCharm Darcula: grey tool-window ground, darker editor panels,
+   orange keyword accent, grey comments. */
+[data-theme='pycharm'] {
+  color-scheme: dark;
+  --white:    #3c3f41;
+  --gray-10:  #313335;
+  --gray-20:  #4b4f52;
+  --gray-30:  #5e6366;
+  --gray-50:  #808080;
+  --gray-60:  #8f969c;
+  --gray-70:  #a4adb6;
+  --gray-90:  #a9b7c6;
+  --gray-100: #d6dde4;
+  --blue-20:  #5c4430;
+  --blue-60:  #cc7832;
+  --blue-70:  #e39553;
+  --blue-80:  #ffc66d;
+  --accent-wash: #3b3026;
+  --comment:  #808080;
+  --text-strong: #ffffff;
+  --header-bg: rgba(60, 63, 65, .94);
+  --panel:        #2b2b2b;
+  --panel-bar:    #323436;
+  --panel-border: #515658;
+}
+
+/* Terminal window: each section is a panel with a title bar.
+   The title comes from data-title on the element. */
+[data-theme] .term {
+  background: var(--panel);
+  border: 1px solid var(--panel-border);
+  border-radius: 8px;
+  padding: 0 var(--s-6) var(--s-6);
+  margin-bottom: var(--s-5);
+  box-shadow: var(--panel-shadow, 0 12px 32px rgba(0, 0, 0, .35));
+  overflow: hidden;
+}
+[data-theme] .term::before {
+  content: attr(data-title);
+  display: block;
+  margin: 0 calc(-1 * var(--s-6)) var(--s-5);
+  padding: .55rem var(--s-4) .55rem calc(var(--s-4) + 60px);
+  font-size: .75rem;
+  line-height: 1.4;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--panel-border);
+  background:
+    radial-gradient(circle, #ff5f57 0 5px, transparent 5.5px) var(--s-4) 50% / 12px 12px no-repeat,
+    radial-gradient(circle, #febc2e 0 5px, transparent 5.5px) calc(var(--s-4) + 20px) 50% / 12px 12px no-repeat,
+    radial-gradient(circle, #28c840 0 5px, transparent 5.5px) calc(var(--s-4) + 40px) 50% / 12px 12px no-repeat,
+    var(--panel-bar);
+}
+/* Title bar without the window dots. */
+[data-theme] .term--plain::before {
+  padding-left: var(--s-4);
+  background: var(--panel-bar);
+}
+@media (max-width: 640px) {
+  [data-theme] .term { padding: 0 var(--s-4) var(--s-4); }
+  [data-theme] .term::before { margin-inline: calc(-1 * var(--s-4)); }
+}
+
+/* Breathing room above the first panel on inner pages. */
+[data-theme] .page { padding-block: var(--s-7) var(--s-9); }

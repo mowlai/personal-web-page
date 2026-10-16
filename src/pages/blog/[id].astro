@@ -20,7 +20,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
 
 <Base title={d.title} description={d.description} image={d.cover} type="article">
   <article class="wrap page">
-    <header class="page-head" data-stream>
+    <header class="page-head term" data-title={`~/blog/${post.id}`} data-stream>
       <a class="back" href="/blog">&larr; blog</a>
       <div class="head__meta">
         <span class="tag tag--accent">{d.category}</span>
@@ -41,7 +41,7 @@ const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
       </figure>
     )}
 
-    <div class="layout">
+    <div class="layout term" data-title="post.md">
       {toc.length > 2 && (
         <aside class="toc">
           <p class="eyebrow">On this page</p>
