@@ -52,21 +52,30 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     <!-- Summary -->
     <section class="summary" data-stream>
       <p>
-        I am a machine learning researcher working across <strong>statistical learning,
-        reinforcement learning, optimization, deep learning, and agentic AI</strong>.
-      </p>
-
-      <p>
-        My research focuses on developing intelligent systems that can <strong>learn
-        from complex data, predict future behavior, and make optimized decisions under
-        uncertainty</strong>. In my Ph.D., I develop machine learning, reinforcement
-        learning, and agentic AI methods for autonomous cyber-physical systems, with
-        applications in real-world control and optimization.
+       Advancing AI for intelligent, adaptive, and autonomous physical systems.
       </p>
       <p>
-        My broader work spans large-scale predictive modeling, multimodal learning,
-        sequential decision-making, anomaly detection, and production ML systems
-        across research and industry.
+        PhD researcher in machine learning at the University of Arizona, with over two
+        years of industry experience. Research at the Cyber-Physical Manufacturing
+        Systems Lab focuses on intelligent, self-correcting cyber-physical systems,
+        combining predictive modeling, mathematical optimization, and reinforcement
+        learning for decision-making and control. This work also explores foundation
+        models and agentic AI for understanding physical dynamics, reasoning over
+        multimodal data, and planning actions in real-world environments, with a
+        primary focus on autonomous water treatment and collaborative research in
+        additive manufacturing.
+      </p>
+      <p>
+        Earlier research at the Perception and Intelligence Lab, under the supervision
+        of <a href="https://www.fabiogalasso.org/" target="_blank" rel="noopener noreferrer">Dr. Fabio Galasso</a>,
+        involved developing novel transformer-based Multi-Style Networks for human pose
+        forecasting to anticipate collisions in human–robot collaboration.
+      </p>
+      <p>
+        Industry experience spans end-to-end ML engineering, including propensity models
+        integrated into an LLM-powered application for client behavioral segmentation
+        and personalized recommendations at IBM, and multimodal deep learning models for
+        spectroscopy-based drug detection at Lightsense Technology.
       </p>
 
       <nav class="links" aria-label="Profiles">
@@ -185,6 +194,10 @@ const featured = (await getCollection('projects', (p) => !p.data.draft && p.data
     color: var(--gray-90);
     margin: 0 0 var(--s-4);
     max-width: var(--measure);
+    /* Justified so every line ends on the same right edge; hyphenation keeps
+       word spacing even on narrow screens. */
+    text-align: justify;
+    hyphens: auto;
     /* Hanging rule down the left, like a quoted block in a terminal. */
     padding-left: var(--s-4);
     border-left: 2px solid var(--rule);

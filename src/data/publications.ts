@@ -26,45 +26,6 @@ export interface Publication {
 
 export const publications: Publication[] = [
   {
-    id: 'rl-ultrafiltration',
-    title:
-      'Reinforcement Learning for Autonomous Control of Ultrafiltration Water Treatment Systems',
-    authors: [SELF, 'et al.'],
-    venue: 'Manuscript in preparation',
-    venueShort: 'In prep.',
-    year: 2026,
-    status: 'in-preparation',
-    type: 'journal',
-    abstract:
-      'Deep reinforcement learning policies for autonomous ultrafiltration control that maximize net water production under operating and safety constraints, evaluated against conventional rule-based backwash scheduling.',
-    links: [],
-    bibtex: `@unpublished{mowlai2026rlultrafiltration,
-  author = {Mowlai, M. and others},
-  title  = {Reinforcement Learning for Autonomous Control of Ultrafiltration Water Treatment Systems},
-  note   = {Manuscript in preparation},
-  year   = {2026}
-}`,
-  },
-  {
-    id: 'autonomous-water-systems',
-    title:
-      'Towards Autonomous Water Systems: Data-driven Monitoring and Prediction of Net Water Production',
-    authors: [SELF, 'et al.'],
-    venue: '2026',
-    venueShort: '2026',
-    year: 2026,
-    status: 'accepted',
-    type: 'conference',
-    abstract:
-      'An end-to-end machine learning pipeline for ultrafiltration plants: late-fusion forecasters for net water production, model benchmarking across horizons, and anomaly monitoring over operational KPIs.',
-    links: [],
-    bibtex: `@inproceedings{mowlai2026autonomouswater,
-  author    = {Mowlai, M. and others},
-  title     = {Towards Autonomous Water Systems: Data-driven Monitoring and Prediction of Net Water Production},
-  year      = {2026}
-}`,
-  },
-  {
     id: 'transformer-pose',
     title: 'Adapting Transformer-Based Multi-Style Networks for Human Pose Prediction',
     authors: [SELF, 'et al.'],
